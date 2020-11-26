@@ -105,22 +105,26 @@ public class MessageBusTest {
         ExampleBroadcastService m1 = new ExampleBroadcastService();
         messageBus.register(m1);
         messageBus.subscribeBroadcast(BroadcastExmpl.class, m1);
-        Message message = null;
-        try{
-            message = messageBus.awaitMessage(m1);
-        } catch (InterruptedException e){}
         messageBus.sendBroadcast(exampleBroadcast);
-        assertEquals(message, exampleBroadcast);
+        assertEquals(messageBus.awaitMessage(m1), exampleBroadcast);
 
-        ExampleEventService m2 = new ExampleEventService();
+        ExampleBroadcastService m2 = new ExampleBroadcastService();
         messageBus.register(m2);
-        messageBus.subscribeEvent(EventExmpl.class, m2);
-        Message message2 = null;
-        try{
-            message2 = messageBus.awaitMessage(m2);
-        } catch (InterruptedException e){}
+        messageBus.subscribeBroadcast(BroadcastExmpl.class, m2);
+        messageBus.sendBroadcast(null);
+        assertNotEquals(messageBus.awaitMessage(m1), null);
+
+        ExampleEventService m3 = new ExampleEventService();
+        messageBus.register(m3);
+        messageBus.subscribeEvent(EventExmpl.class, m3);
         messageBus.sendEvent(exampleEvent);
-        assertEquals(message2, exampleEvent);
+        assertEquals(messageBus.awaitMessage(m3), exampleEvent);
+
+        ExampleEventService m4 = new ExampleEventService();
+        messageBus.register(m4);
+        messageBus.subscribeEvent(EventExmpl.class, m4);
+        messageBus.sendEvent(null);
+        assertNotEquals(messageBus.awaitMessage(m3), null);
 
     }
 
