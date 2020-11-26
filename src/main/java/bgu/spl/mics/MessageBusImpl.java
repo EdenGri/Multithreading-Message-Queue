@@ -10,10 +10,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MessageBusImpl implements MessageBus {
 
-	private static MessageBusImpl messageInstance;
+	private static MessageBusImpl messageInstance=null;
 
 	public static MessageBusImpl getInstance(){
-		if (messageInstance != null)
+		if (messageInstance == null)
 			messageInstance = new MessageBusImpl();
 
 		return messageInstance;

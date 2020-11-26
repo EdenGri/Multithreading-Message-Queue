@@ -76,6 +76,8 @@ public class MessageBusTest {
 
     }
 
+    //todo delete
+/*
     @Test
     public void testSendBroadcast() {
         assertDoesNotThrow(() -> messageBus.sendBroadcast(null));
@@ -98,7 +100,7 @@ public class MessageBusTest {
     public void testUnregister() {
         assertDoesNotThrow(()-> messageBus.unregister(null));
     }
-
+*/
 
     @Test
     public void testAwaitMessage() throws InterruptedException{
@@ -108,23 +110,12 @@ public class MessageBusTest {
         messageBus.sendBroadcast(exampleBroadcast);
         assertEquals(messageBus.awaitMessage(m1), exampleBroadcast);
 
-        ExampleBroadcastService m2 = new ExampleBroadcastService();
+
+        ExampleEventService m2 = new ExampleEventService();
         messageBus.register(m2);
-        messageBus.subscribeBroadcast(BroadcastExmpl.class, m2);
-        messageBus.sendBroadcast(null);
-        assertNotEquals(messageBus.awaitMessage(m1), null);
-
-        ExampleEventService m3 = new ExampleEventService();
-        messageBus.register(m3);
-        messageBus.subscribeEvent(EventExmpl.class, m3);
+        messageBus.subscribeEvent(EventExmpl.class, m2);
         messageBus.sendEvent(exampleEvent);
-        assertEquals(messageBus.awaitMessage(m3), exampleEvent);
-
-        ExampleEventService m4 = new ExampleEventService();
-        messageBus.register(m4);
-        messageBus.subscribeEvent(EventExmpl.class, m4);
-        messageBus.sendEvent(null);
-        assertNotEquals(messageBus.awaitMessage(m3), null);
+        assertEquals(messageBus.awaitMessage(m2), exampleEvent);
 
     }
 
