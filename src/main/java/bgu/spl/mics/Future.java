@@ -79,7 +79,7 @@ public class Future<T> {
 	public T get(long timeout, TimeUnit unit) {
 		long timeToWait = unit.toMillis(timeout);
 		try{
-			synchronized (this){
+			synchronized (this){ //todo check synchronized
 				if(!this.isDone)
 					this.wait(timeToWait);
 			}
