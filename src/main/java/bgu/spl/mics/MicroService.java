@@ -1,5 +1,7 @@
 package bgu.spl.mics;
 
+import bgu.spl.mics.application.callbacks.TerminateBroadcastCallback;
+import bgu.spl.mics.application.messages.TerminateBroadcast;
 import bgu.spl.mics.application.services.LeiaMicroservice;
 
 import java.util.HashMap;
@@ -29,6 +31,7 @@ public abstract class MicroService implements Runnable {
 
 
 
+
     /**
      * @param name the micro-service name (used mainly for debugging purposes -
      *             does not have to be unique)
@@ -36,6 +39,7 @@ public abstract class MicroService implements Runnable {
     public MicroService(String name) {
         this.name=name;
         mb=MessageBusImpl.getInstance();
+
         initialize();
     }
 

@@ -28,13 +28,14 @@ public class LeiaMicroservice extends MicroService {
     public LeiaMicroservice(Attack[] attacks) {
         super("Leia");
 		this.attacks = attacks;
+        CallbacksHM=new HashMap<>();
         TerminateBroadcastCallback _TBCallback=new TerminateBroadcastCallback();
-		CallbacksHM.put(TerminateBroadcast.class,_TBCallback);
+        CallbacksHM.put(TerminateBroadcast.class,_TBCallback);
     }
 
     @Override
     protected void initialize() {
-    	subscribeBroadcast(TerminateBroadcast.class,CallbacksHM.get(TerminateBroadcast));
+    	subscribeBroadcast(TerminateBroadcast.class,CallbacksHM.get(TerminateBroadcast.class));
     	for (Attack attack:attacks){
             int _duration =attack.getDuration();
             List<Integer> _Serials =attack.getSerials();
