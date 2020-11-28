@@ -49,6 +49,11 @@ public class Future<T> {
      * Resolves the result of this Future object.
      */
 	public void resolve (T result) {
+		this.result = result;
+		this.isDone = true;
+		synchronized (this){
+			this.notifyAll();
+		}
 		
 	}
 	
@@ -57,7 +62,7 @@ public class Future<T> {
      */
 	public boolean isDone() {
 
-		return false;
+		return isDone;
 	}
 	
 	/**
@@ -72,8 +77,19 @@ public class Future<T> {
      *         elapsed, return null.
      */
 	public T get(long timeout, TimeUnit unit) {
+		long timeToWait = unit.toMillis(timeout);
+		try{
+			synchronized (this){
+				if(!this.isDone)
+					this.wait(timeToWait);
+			}
+
+		}
+		catch (InterruptedException e){
+			throw new IllegalStateException(e.getMessage()); //todo maybe s.o.p error num instead
+		}
 		
-        return null;
+        return result;
 	}
 
 }
