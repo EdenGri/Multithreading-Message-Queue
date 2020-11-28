@@ -18,6 +18,8 @@ public class Future<T> {
 	 * This should be the the only public constructor in this class.
 	 */
 	public Future() {
+		this.isDone = false;
+		this.result = null;
 		
 	}
 	
@@ -30,8 +32,17 @@ public class Future<T> {
      * 	       
      */
 	public T get() {
-		
-        return null; 
+
+			try {
+				synchronized (this) { //todo check synchronized here
+					while (!isDone) {
+						this.wait();
+					}
+				}
+			} catch (InterruptedException e){
+				throw new IllegalStateException(); //todo put something in this line like s.o.p
+			}
+		return result;
 	}
 	
 	/**
