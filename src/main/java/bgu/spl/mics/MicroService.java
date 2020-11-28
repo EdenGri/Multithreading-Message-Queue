@@ -67,7 +67,7 @@ public abstract class MicroService implements Runnable {
      */
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
     	messageBus.subscribeEvent(type,this);
-    	callbacksMap.putIfAbsent(type, callback);
+    	callbacksMap.put(type, callback);
     }
 
     /**
@@ -92,7 +92,7 @@ public abstract class MicroService implements Runnable {
      */
     protected final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) {
     	messageBus.subscribeBroadcast(type,this);
-    	callbacksMap.putIfAbsent(type, callback);
+    	callbacksMap.put(type, callback);
     }
 
     /**
@@ -171,13 +171,15 @@ public abstract class MicroService implements Runnable {
         initialize();
         subscribeBroadcast(TerminateBroadcast.class, broadcast -> terminate());
         messageBus.register(this);
-        while(!terminated){
-            try{
-                Message message = messageBus.awaitMessage(this);
-                callbacksMap.get(message.getClass()).call(message);
-            }
-            catch (InterruptedException e){
-                throw new IllegalStateException(e.getMessage()); //todo change this line to print some error
+            try {
+                while (!terminated) {
+                    Message message = messageBus.awaitMessage(this);
+                    Callback callback = callbacksMap.get(message.getClass());
+                    callback.call(message);
+                }
+                messageBus.unregister(this);
+            } catch (InterruptedException e){
+                System.out.println("Terminated bla bla..."); //todo change this line to print according to instructions
             }
         }
 
