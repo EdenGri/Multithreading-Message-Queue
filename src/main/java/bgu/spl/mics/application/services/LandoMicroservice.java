@@ -19,6 +19,8 @@ public class LandoMicroservice  extends MicroService {
 
     @Override
     protected void initialize() {
+        subscribeBroadcast(TerminateBroadcast);
+        subscribeEvent(BombDestroyerEvent);
        
     }
 }

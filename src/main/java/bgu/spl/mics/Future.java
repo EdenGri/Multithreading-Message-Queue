@@ -20,7 +20,7 @@ public class Future<T> {
 	public Future() {
 		this.isDone = false;
 		this.result = null;
-		
+
 	}
 	
 	/**
@@ -54,7 +54,7 @@ public class Future<T> {
 		synchronized (this){
 			this.notifyAll();
 		}
-		
+
 	}
 	
 	/**
@@ -88,7 +88,7 @@ public class Future<T> {
 		catch (InterruptedException e){
 			throw new IllegalStateException(e.getMessage()); //todo maybe s.o.p error num instead
 		}
-		
+
         return result;
 	}
 
