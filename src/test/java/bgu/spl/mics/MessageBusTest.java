@@ -76,32 +76,6 @@ public class MessageBusTest {
 
     }
 
-    //todo delete
-/*
-    @Test
-    public void testSendBroadcast() {
-        assertDoesNotThrow(() -> messageBus.sendBroadcast(null));
-
-    }
-
-    @Test
-    public void testSendEvent() {
-        assertDoesNotThrow(() -> messageBus.sendEvent(null));
-        Future future = messageBus.sendEvent(null);
-        assertNotEquals(future, null);
-    }
-
-    @Test
-    public void testRegister() {
-        assertDoesNotThrow(()-> messageBus.register(null));
-    }
-
-    @Test
-    public void testUnregister() {
-        assertDoesNotThrow(()-> messageBus.unregister(null));
-    }
-*/
-
     @Test
     public void testAwaitMessage() throws InterruptedException{
         ExampleBroadcastService m1 = new ExampleBroadcastService();

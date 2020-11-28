@@ -50,5 +50,4 @@ public class EwokTest {
         ewok.release();
         assertTrue(ewok.isAvailable());
     }
-
 }
