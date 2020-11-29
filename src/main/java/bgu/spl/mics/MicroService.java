@@ -186,18 +186,18 @@ public abstract class MicroService implements Runnable {
         initialize();
         subscribeBroadcast(TerminateBroadcast.class, broadcast -> terminate());
         messageBus.register(this);
-            try {
-                while (!terminated) {
-                    Message message = messageBus.awaitMessage(this);
-                    Callback callback = callbacksMap.get(message.getClass());
-                    callback.call(message);
-                }
-                messageBus.unregister(this);
-            } catch (InterruptedException e){
-                System.out.println("Terminated bla bla..."); //todo change this line to print according to instructions
+        try {
+            while (!terminated) {
+                Message message = messageBus.awaitMessage(this);
+                Callback callback = callbacksMap.get(message.getClass());
+                callback.call(message);
             }
+            messageBus.unregister(this);
+        } catch (InterruptedException e){
+            System.out.println("Terminated bla bla..."); //todo change this line to print according to instructions
         }
-
     }
 
 }
+
+
