@@ -18,8 +18,9 @@ public class Future<T> {
 	 * This should be the the only public constructor in this class.
 	 */
 	public Future() {
-		isDone=false;
-		result=null;
+		this.isDone = false;
+		this.result = null;
+
 	}
 	
 	/**
@@ -31,14 +32,29 @@ public class Future<T> {
      * 	       
      */
 	public T get() {
-		return null;
+
+			try {
+				synchronized (this) { //todo check synchronized here
+					while (!isDone) {
+						this.wait();
+					}
+				}
+			} catch (InterruptedException e){
+				throw new IllegalStateException(); //todo put something in this line like s.o.p
+			}
+		return result;
 	}
 	
 	/**
      * Resolves the result of this Future object.
      */
 	public void resolve (T result) {
-		
+		this.result = result;
+		this.isDone = true;
+		synchronized (this){
+			this.notifyAll();
+		}
+
 	}
 	
 	/**
@@ -46,7 +62,7 @@ public class Future<T> {
      */
 	public boolean isDone() {
 
-		return false;
+		return isDone;
 	}
 	
 	/**
@@ -61,8 +77,19 @@ public class Future<T> {
      *         elapsed, return null.
      */
 	public T get(long timeout, TimeUnit unit) {
-		
-        return null;
+		long timeToWait = unit.toMillis(timeout);
+		try{
+			synchronized (this){ //todo check synchronized
+				if(!this.isDone)
+					this.wait(timeToWait);
+			}
+
+		}
+		catch (InterruptedException e){
+			throw new IllegalStateException(e.getMessage()); //todo maybe s.o.p error num instead
+		}
+
+        return result;
 	}
 
 }

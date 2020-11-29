@@ -25,9 +25,10 @@ import java.util.HashMap;
  */
 public abstract class MicroService implements Runnable { 
     private String name;
-    private MessageBus mb;
-    private HashMap<Class<? extends Message>,Callback> CallbacksMap;
-    private boolean terminateCondition;
+    private MessageBus messageBus;
+    private HashMap<Class<? extends Message>, Callback> callbacksMap = new HashMap<>();
+    private boolean terminated;
+
 
 
 
@@ -37,9 +38,10 @@ public abstract class MicroService implements Runnable {
      */
     public MicroService(String name) {
         this.name=name;
-        mb=MessageBusImpl.getInstance();
-        CallbacksMap=new HashMap<>();
-        terminateCondition=false;
+        messageBus = MessageBusImpl.getInstance();
+        callbacksMap = new HashMap<>();
+        terminated = false;
+
     }
 
     /**
@@ -64,7 +66,8 @@ public abstract class MicroService implements Runnable {
      *                 queue.
      */
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
-    	mb.subscribeEvent(type,this);
+    	messageBus.subscribeEvent(type,this);
+    	callbacksMap.put(type, callback);
     }
 
     /**
@@ -88,8 +91,8 @@ public abstract class MicroService implements Runnable {
      *                 queue.
      */
     protected final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) {
-    	mb.subscribeBroadcast(type,this);
-    	CallbacksMap.putIfAbsent(type,callback);
+    	messageBus.subscribeBroadcast(type,this);
+    	callbacksMap.put(type, callback);
     }
 
     /**
@@ -105,8 +108,8 @@ public abstract class MicroService implements Runnable {
      * 	       			null in case no micro-service has subscribed to {@code e.getClass()}.
      */
     protected final <T> Future<T> sendEvent(Event<T> e) {
-    	mb.sendEvent(e);
-        return null; 
+    	Future output = messageBus.sendEvent(e);
+    	return output;
     }
 
     /**
@@ -116,7 +119,7 @@ public abstract class MicroService implements Runnable {
      * @param b The broadcast message to send
      */
     protected final void sendBroadcast(Broadcast b) {
-    	mb.sendBroadcast(b);
+    	messageBus.sendBroadcast(b);
     }
 
     /**
@@ -130,7 +133,8 @@ public abstract class MicroService implements Runnable {
      *               {@code e}.
      */
     protected final <T> void complete(Event<T> e, T result) {
-    	
+        messageBus.complete(e, result);
+
     }
 
     /**
@@ -143,6 +147,14 @@ public abstract class MicroService implements Runnable {
      * message.
      */
     protected final void terminate() {
+        if(!callbacksMap.isEmpty())
+            messageBus.unregister(this);
+        this.terminated = true;
+
+
+
+        /* Eden implementation
+
         long terminationTime=System.currentTimeMillis();
 
         Diary diary=Diary.getInstance();
@@ -153,8 +165,8 @@ public abstract class MicroService implements Runnable {
         diary.setR2D2Deactivate(terminationTime);
         diary.setLandoTerminate(terminationTime);
 
-        terminateCondition=true;
-    	
+        terminateCondition=true;*/
+
     }
 
     /**
@@ -172,16 +184,20 @@ public abstract class MicroService implements Runnable {
     @Override
     public final void run() {
         initialize();
-        subscribeBroadcast(TerminateBroadcast.class,broadcast -> terminate());
-        try {
-            while (!terminateCondition){
-                Message message=mb.awaitMessage(this);
-                Class type= message.getClass();
-                Callback callback=this.CallbacksMap.get(type);
-                callback.call(message);
+        subscribeBroadcast(TerminateBroadcast.class, broadcast -> terminate());
+        messageBus.register(this);
+            try {
+                while (!terminated) {
+                    Message message = messageBus.awaitMessage(this);
+                    Callback callback = callbacksMap.get(message.getClass());
+                    callback.call(message);
+                }
+                messageBus.unregister(this);
+            } catch (InterruptedException e){
+                System.out.println("Terminated bla bla..."); //todo change this line to print according to instructions
             }
+        }
 
-        }catch (InterruptedException e){};
     }
 
 }
