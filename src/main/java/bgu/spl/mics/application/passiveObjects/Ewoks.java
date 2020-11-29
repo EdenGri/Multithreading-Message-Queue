@@ -1,8 +1,7 @@
 package bgu.spl.mics.application.passiveObjects;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -14,5 +13,32 @@ import java.util.List;
  * You can add ONLY private methods and fields to this class.
  */
 public class Ewoks {
+
+    private final Map<Integer, Ewok> ewokMap = new HashMap<>();
+
+    private Ewoks() { //default constructor
+    }
+
+    public static Ewoks getInstance() {
+        return Singleton.instance;
+    }
+
+    private static class Singleton {
+        private static Ewoks instance = new Ewoks();
+
+    }
+
+    //initializes ewok collection
+    //adds all ewoks to the collection
+    public void load(Ewok[] ewoks) {
+        synchronized (ewokMap) {
+            for (Ewok e : ewoks) {
+                ewokMap.put(e.getSerialNumber(), e);
+            }
+        }
+    }
+
+    public void releaseEwoks(List<Integer> serialNumbers)
+
 
 }

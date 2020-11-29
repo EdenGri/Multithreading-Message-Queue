@@ -15,6 +15,9 @@ public class Ewok {
      * Acquires an Ewok
      */
     public void acquire() {
+        if(available)
+            available = false;
+
 		
     }
 
@@ -22,10 +25,16 @@ public class Ewok {
      * release an Ewok
      */
     public void release() {
+        if(!available)
+            available = true;
     	
     }
     //added getter to Ewok availability for tests
     public boolean isAvailable(){
         return available;
+    }
+
+    public int getSerialNumber(){
+        return serialNumber;
     }
 }
