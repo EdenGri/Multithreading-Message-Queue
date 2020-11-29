@@ -1,0 +1,20 @@
+-------------------------------------------------------------------------------
+Test set: bgu.spl.mics.FutureTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 4, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec <<< FAILURE! - in bgu.spl.mics.FutureTest
+bgu.spl.mics.FutureTest.testGet()  Time elapsed: 0 sec  <<< FAILURE!
+java.lang.NullPointerException
+	at bgu.spl.mics.FutureTest.testGet(FutureTest.java:27)
+
+bgu.spl.mics.FutureTest.testResolve()  Time elapsed: 0 sec  <<< FAILURE!
+java.lang.NullPointerException
+	at bgu.spl.mics.FutureTest.testResolve(FutureTest.java:37)
+
+bgu.spl.mics.FutureTest.testIsDone()  Time elapsed: 0 sec  <<< FAILURE!
+java.lang.NullPointerException
+	at bgu.spl.mics.FutureTest.testIsDone(FutureTest.java:45)
+
+bgu.spl.mics.FutureTest.testGetWithTimeOut()  Time elapsed: 0 sec  <<< FAILURE!
+java.lang.NullPointerException
+	at bgu.spl.mics.FutureTest.testGetWithTimeOut(FutureTest.java:54)
+

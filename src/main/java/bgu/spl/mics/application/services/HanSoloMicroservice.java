@@ -1,18 +1,9 @@
 package bgu.spl.mics.application.services;
 
-import java.util.HashMap;
-import java.util.List;
-
-import bgu.spl.mics.Callback;
-import bgu.spl.mics.Message;
 import bgu.spl.mics.MicroService;
 import bgu.spl.mics.application.callbacks.AttackEventCallback;
-import bgu.spl.mics.application.callbacks.TerminateBroadcastCallback;
 import bgu.spl.mics.application.messages.AttackEvent;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
-import bgu.spl.mics.application.passiveObjects.Attack;
-import bgu.spl.mics.application.passiveObjects.Diary;
-import bgu.spl.mics.application.passiveObjects.Ewoks;
 
 /**
  * HanSoloMicroservices is in charge of the handling {@link AttackEvents}.
@@ -23,22 +14,17 @@ import bgu.spl.mics.application.passiveObjects.Ewoks;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class HanSoloMicroservice extends MicroService {
-    private HashMap<Class<? extends Message>,Callback<? extends Message>> CallbacksHM;
-
+    int numOfAttack;
     public HanSoloMicroservice() {
         super("Han");
-        CallbacksHM=new HashMap<>();
-        TerminateBroadcastCallback _TBCallback=new TerminateBroadcastCallback();
-        CallbacksHM.put(TerminateBroadcast.class,_TBCallback);
-        AttackEventCallback _AECallback=new AttackEventCallback();
-        CallbacksHM.put(AttackEvent.class,_AECallback);
+        numOfAttack=0;
     }
 
 
     @Override
     protected void initialize() {
-        subscribeBroadcast(AttackEvent.class , callback);
-        subscribeEvent(AttackEvent.class, callback);
-        subscribeBroadcast(TerminateBroadcast,);
+        AttackEventCallback AttackEventCB=new AttackEventCallback();
+        subscribeEvent(AttackEvent.class, AttackEventCB);
+
     }
 }

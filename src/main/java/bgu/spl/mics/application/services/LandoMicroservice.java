@@ -2,9 +2,9 @@ package bgu.spl.mics.application.services;
 
 
 import bgu.spl.mics.MicroService;
+import bgu.spl.mics.application.callbacks.BombDestroyerEventCallback;
 import bgu.spl.mics.application.messages.BombDestroyerEvent;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
-import bgu.spl.mics.application.passiveObjects.Diary;
 
 /**
  * LandoMicroservice
@@ -19,8 +19,8 @@ public class LandoMicroservice  extends MicroService {
 
     @Override
     protected void initialize() {
-        subscribeBroadcast(TerminateBroadcast);
-        subscribeEvent(BombDestroyerEvent);
-       
+        BombDestroyerEventCallback BombDestroyerEventCB=new BombDestroyerEventCallback();
+        subscribeEvent(BombDestroyerEvent.class, BombDestroyerEventCB);
+
     }
 }

@@ -1,11 +1,9 @@
 package bgu.spl.mics;
 
-import bgu.spl.mics.application.callbacks.TerminateBroadcastCallback;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
-import bgu.spl.mics.application.services.LeiaMicroservice;
+import bgu.spl.mics.application.passiveObjects.Diary;
 
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The MicroService is an abstract class that any micro-service in the system
@@ -27,8 +25,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class MicroService implements Runnable { 
     private String name;
-    private MessageBusImpl mb;
-
+    private MessageBus mb;
+    private HashMap<Class<? extends Message>,Callback> CallbacksMap;
+    private boolean terminateCondition;
 
 
 
@@ -39,8 +38,8 @@ public abstract class MicroService implements Runnable {
     public MicroService(String name) {
         this.name=name;
         mb=MessageBusImpl.getInstance();
-
-        initialize();
+        CallbacksMap=new HashMap<>();
+        terminateCondition=false;
     }
 
     /**
@@ -90,6 +89,7 @@ public abstract class MicroService implements Runnable {
      */
     protected final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) {
     	mb.subscribeBroadcast(type,this);
+    	CallbacksMap.putIfAbsent(type,callback);
     }
 
     /**
@@ -143,6 +143,17 @@ public abstract class MicroService implements Runnable {
      * message.
      */
     protected final void terminate() {
+        long terminationTime=System.currentTimeMillis();
+
+        Diary diary=Diary.getInstance();
+
+        diary.setLeiaTerminate(terminationTime);
+        diary.setC3POTerminate(terminationTime);
+        diary.setHanSoloTerminate(terminationTime);
+        diary.setR2D2Deactivate(terminationTime);
+        diary.setLandoTerminate(terminationTime);
+
+        terminateCondition=true;
     	
     }
 
@@ -160,13 +171,17 @@ public abstract class MicroService implements Runnable {
      */
     @Override
     public final void run() {
+        initialize();
+        subscribeBroadcast(TerminateBroadcast.class,broadcast -> terminate());
         try {
-            Message message=mb.awaitMessage(this);
-            message.clas
-        }catch (InterruptedException e){};
+            while (!terminateCondition){
+                Message message=mb.awaitMessage(this);
+                Class type= message.getClass();
+                Callback callback=this.CallbacksMap.get(type);
+                callback.call(message);
+            }
 
-        this.callBackscall;
-    	
+        }catch (InterruptedException e){};
     }
 
 }
