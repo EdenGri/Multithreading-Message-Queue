@@ -17,7 +17,7 @@ public class MessageBusImpl implements MessageBus {
 	private ConcurrentHashMap<MicroService, LinkedBlockingQueue<Message>> MicroServiceMap = new ConcurrentHashMap<>();
 
 	private static class Singleton {
-		private static MessageBus instance = new MessageBusImpl();
+		private static MessageBus instance = new MessageBusImpl();//todo check if to add final
 	}
 
 	public static MessageBus getInstance(){

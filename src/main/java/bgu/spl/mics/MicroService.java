@@ -1,6 +1,7 @@
 package bgu.spl.mics;
 
 import bgu.spl.mics.application.messages.TerminateBroadcast;
+import bgu.spl.mics.application.passiveObjects.Diary;
 
 import java.util.HashMap;
 
@@ -41,7 +42,6 @@ public abstract class MicroService implements Runnable {
         callbacksMap = new HashMap<>();
         terminated = false;
 
-       // initialize(); todo delete
     }
 
     /**
@@ -134,7 +134,7 @@ public abstract class MicroService implements Runnable {
      */
     protected final <T> void complete(Event<T> e, T result) {
         messageBus.complete(e, result);
-    	
+
     }
 
     /**
@@ -150,7 +150,23 @@ public abstract class MicroService implements Runnable {
         if(!callbacksMap.isEmpty())
             messageBus.unregister(this);
         this.terminated = true;
-    	
+
+
+
+        /* Eden implementation
+
+        long terminationTime=System.currentTimeMillis();
+
+        Diary diary=Diary.getInstance();
+
+        diary.setLeiaTerminate(terminationTime);
+        diary.setC3POTerminate(terminationTime);
+        diary.setHanSoloTerminate(terminationTime);
+        diary.setR2D2Deactivate(terminationTime);
+        diary.setLandoTerminate(terminationTime);
+
+        terminateCondition=true;*/
+
     }
 
     /**
@@ -158,7 +174,6 @@ public abstract class MicroService implements Runnable {
      *         construction time and is used mainly for debugging purposes.
      */
     public final String getName() {
-
         return name;
     }
 
@@ -171,27 +186,18 @@ public abstract class MicroService implements Runnable {
         initialize();
         subscribeBroadcast(TerminateBroadcast.class, broadcast -> terminate());
         messageBus.register(this);
-            try {
-                while (!terminated) {
-                    Message message = messageBus.awaitMessage(this);
-                    Callback callback = callbacksMap.get(message.getClass());
-                    callback.call(message);
-                }
-                messageBus.unregister(this);
-            } catch (InterruptedException e){
-                System.out.println("Terminated bla bla..."); //todo change this line to print according to instructions
+        try {
+            while (!terminated) {
+                Message message = messageBus.awaitMessage(this);
+                Callback callback = callbacksMap.get(message.getClass());
+                callback.call(message);
             }
+            messageBus.unregister(this);
+        } catch (InterruptedException e){
+            System.out.println("Terminated bla bla..."); //todo change this line to print according to instructions
         }
-
     }
-    //edens previous code:
-//        try {
-//            Message message=mb.awaitMessage(this);
-//            message.clas
-//        }catch (InterruptedException e){};
-//
-//        this.callBackscall;
-//
-//    }
 
 }
+
+
