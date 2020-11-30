@@ -14,6 +14,12 @@ public class Ewok {
     /**
      * Acquires an Ewok
      */
+
+    public Ewok (int serialNumber){
+        this.serialNumber = serialNumber;
+        available = true;
+    }
+
     public void acquire() {
         if(available)
             available = false;
