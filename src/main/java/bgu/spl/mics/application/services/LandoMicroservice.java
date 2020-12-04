@@ -5,6 +5,7 @@ import bgu.spl.mics.MicroService;
 import bgu.spl.mics.application.callbacks.BombDestroyerEventCallback;
 import bgu.spl.mics.application.messages.BombDestroyerEvent;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
+import bgu.spl.mics.application.passiveObjects.Diary;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -27,6 +28,10 @@ public class LandoMicroservice  extends MicroService {
     protected void initialize() {
         BombDestroyerEventCallback BombDestroyerEventCB=new BombDestroyerEventCallback();
         subscribeEvent(BombDestroyerEvent.class, BombDestroyerEventCB);
+        subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {         //did this is microservice idk if should do it here? todo check
+            Diary.getInstance().setLandoTerminate(System.currentTimeMillis());
+            terminate();
+        });
         latch.countDown();
 
     }

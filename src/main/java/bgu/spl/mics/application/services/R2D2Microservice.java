@@ -3,6 +3,7 @@ import bgu.spl.mics.MicroService;
 import bgu.spl.mics.application.callbacks.DeactivationEventCallback;
 import bgu.spl.mics.application.messages.DeactivationEvent;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
+import bgu.spl.mics.application.passiveObjects.Diary;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -28,6 +29,10 @@ public class R2D2Microservice extends MicroService {
     protected void initialize() {
         DeactivationEventCallback DeactivationEventCB=new DeactivationEventCallback();
         subscribeEvent(DeactivationEvent.class, DeactivationEventCB);
+        subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {         //did this is microservice idk if should do it here? todo check
+            Diary.getInstance().setR2D2Terminate(System.currentTimeMillis());
+            terminate();
+        });
         latch.countDown();
     }
 }

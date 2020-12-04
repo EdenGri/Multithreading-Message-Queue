@@ -5,6 +5,7 @@ import bgu.spl.mics.application.callbacks.AttackEventCallback;
 import bgu.spl.mics.application.messages.AttackEvent;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
 import bgu.spl.mics.application.passiveObjects.Diary;
+import bgu.spl.mics.application.passiveObjects.Ewoks;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -19,22 +20,25 @@ import java.util.concurrent.CountDownLatch;
  */
 public class C3POMicroservice extends MicroService {
     private int numOfAttack;
+    private Ewoks ewoks;
     private CountDownLatch latch;
+
 	
     public C3POMicroservice(CountDownLatch latch) {
         super("C3PO");
+        ewoks = Ewoks.getInstance();
         numOfAttack=0;
         this.latch = latch;
     }
 
     @Override
     protected void initialize() {
-        subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {         //did this is microservice idk if should do it here
+        AttackEventCallback AttackEventCB=new AttackEventCallback();
+        subscribeEvent(AttackEvent.class, AttackEventCB);
+        subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {         //did this is microservice idk if should do it here? todo check
             Diary.getInstance().setC3POTerminate(System.currentTimeMillis());
             terminate();
         });
-        AttackEventCallback AttackEventCB=new AttackEventCallback();
-        subscribeEvent(AttackEvent.class, AttackEventCB);
         latch.countDown();
     }
 }

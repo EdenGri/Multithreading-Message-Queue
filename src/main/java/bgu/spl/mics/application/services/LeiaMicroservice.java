@@ -5,12 +5,13 @@ import bgu.spl.mics.*;
 import bgu.spl.mics.application.messages.AttackEvent;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
 import bgu.spl.mics.application.passiveObjects.Attack;
+import bgu.spl.mics.application.passiveObjects.Diary;
 
 
 /**
- * LeiaMicroservices Initialized with Attack objects, and sends them as  {@link AttackEvents}.
+ * LeiaMicroservices Initialized with Attack objects, and sends them as  {@link AttackEvent}.
  * This class may not hold references for objects which it is not responsible for:
- * {@link AttackEvents}.
+ * {@link AttackEvent}.
  *
  * You can add private fields and public methods to this class.
  * You MAY change constructor signatures and even add new public constructors.
@@ -30,6 +31,10 @@ public class LeiaMicroservice extends MicroService {
             List<Integer> _Serials =attack.getSerials();
     	    AttackEvent newAttackEvent=new AttackEvent(false,_duration,_Serials);
     	    sendEvent(newAttackEvent);
+            subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {         //did this is microservice idk if should do it here? todo check
+                Diary.getInstance().setLeiaTerminate(System.currentTimeMillis());
+                terminate();
+            });
         }
     }
 }
