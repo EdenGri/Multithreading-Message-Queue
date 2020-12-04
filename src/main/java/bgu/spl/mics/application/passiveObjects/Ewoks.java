@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class Ewoks {
 
-    private ConcurrentHashMap<Integer, Ewok> ewokMap = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Integer, Ewok> ewokMap = new ConcurrentHashMap<>();
 
     private Ewoks() { //default constructor
     }
@@ -32,10 +32,10 @@ public class Ewoks {
 
     //initializes ewok collection
     //adds all ewoks to the collection
-    public void load(Ewok[] ewoks) {
+    public void load(int ewoksNum) { //todo check this
         synchronized (ewokMap) {
-            for (Ewok e : ewoks) {
-                ewokMap.put(e.getSerialNumber(), e);
+            for (int i = 1; i <= ewoksNum; i++) {
+                ewokMap.put(i, new Ewok(i));
             }
         }
     }
@@ -66,7 +66,7 @@ public class Ewoks {
             return;
         if(time > 0){
             try{
-                Thread.sleep(time);//todo fix time
+                Thread.sleep(time);//todo fix/check time
             } catch (InterruptedException e){
                 e.printStackTrace();
             }

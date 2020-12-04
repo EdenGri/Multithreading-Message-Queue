@@ -12,7 +12,7 @@ public class AttackEventCallback implements Callback<AttackEvent>{
             Thread.sleep(c.getAttack().getDuration());
             Diary diary=Diary.getInstance();
             //todo add synchronize
-            diary.setTotalAttacks(diary.getTotalAttacks()+1);
-        }catch (InterruptedException e){}
+            diary.setTotalAttacks(diary.getTotalAttacks()+1); //atomic integer + getandincrement
+        } catch (InterruptedException e){}
     }
 }
