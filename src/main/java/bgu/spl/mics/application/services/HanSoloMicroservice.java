@@ -1,7 +1,6 @@
 package bgu.spl.mics.application.services;
 
 import bgu.spl.mics.MicroService;
-import bgu.spl.mics.application.callbacks.AttackEventCallback;
 import bgu.spl.mics.application.messages.AttackEvent;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
 import bgu.spl.mics.application.passiveObjects.Attack;
@@ -20,13 +19,11 @@ import java.util.concurrent.CountDownLatch;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class HanSoloMicroservice extends MicroService {
-    private int numOfAttack;
     private Ewoks ewoks;
     private CountDownLatch latch;
 
     public HanSoloMicroservice(CountDownLatch latch) {
         super("Han");
-        numOfAttack=0;
         ewoks = Ewoks.getInstance();
         this.latch = latch;
     }
@@ -34,11 +31,6 @@ public class HanSoloMicroservice extends MicroService {
 
     @Override
     protected void initialize() {
-        AttackEventCallback AttackEventCB=new AttackEventCallback();
-        subscribeEvent(AttackEvent.class, AttackEventCB);
-
-
-        //Ofrys Code:
         subscribeEvent(AttackEvent.class, (c) -> {
             Attack attack = c.getAttack();
             List<Integer> resources = attack.getSerials();
@@ -60,6 +52,5 @@ public class HanSoloMicroservice extends MicroService {
             terminate();
         });
         latch.countDown();
-
     }
 }

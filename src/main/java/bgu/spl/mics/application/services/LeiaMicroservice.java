@@ -1,8 +1,11 @@
 package bgu.spl.mics.application.services;
+import java.util.ArrayList;
 import java.util.List;
 
 import bgu.spl.mics.*;
 import bgu.spl.mics.application.messages.AttackEvent;
+import bgu.spl.mics.application.messages.BombDestroyerEvent;
+import bgu.spl.mics.application.messages.DeactivationEvent;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
 import bgu.spl.mics.application.passiveObjects.Attack;
 import bgu.spl.mics.application.passiveObjects.Diary;
@@ -26,17 +29,32 @@ public class LeiaMicroservice extends MicroService {
 
     @Override
     protected void initialize() {
-    	for (Attack attack:attacks){
-            int _duration =attack.getDuration();
-            List<Integer> _Serials =attack.getSerials();
-    	    AttackEvent newAttackEvent=new AttackEvent(false,_duration,_Serials);
-    	    sendEvent(newAttackEvent);
-
-            subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
-                Diary.getInstance().setLeiaTerminate(System.currentTimeMillis());
-                terminate();
-            });
+        ArrayList<Future<Boolean>> attacksStatuses=new ArrayList<>();
+    	for (Attack attack:attacks) {
+            AttackEvent newAttackEvent = new AttackEvent(attack);
+            Future futureAttack = sendEvent(newAttackEvent);
+            attacksStatuses.add(futureAttack);
         }
+    	for (Future futureAttack:attacksStatuses){
+    	    futureAttack.get();
+        }
+
+        Future futureDeactivation =sendEvent(new DeactivationEvent());
+    	futureDeactivation.get();
+
+        Future futureBombDestroyer =sendEvent(new BombDestroyerEvent());
+        futureBombDestroyer.get();
+
+        subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
+            Diary.getInstance().setLeiaTerminate(System.currentTimeMillis());
+            terminate();
+        });
+
+        sendBroadcast(new TerminateBroadcast());//todo check if it needs to be lando who send the terminateBroadcast
+
+
+
+
     }
 }
 

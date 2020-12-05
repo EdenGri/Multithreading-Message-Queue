@@ -23,8 +23,6 @@ public class Ewok {
     public void acquire() {
         if(available)
             available = false;
-
-		
     }
 
     /**

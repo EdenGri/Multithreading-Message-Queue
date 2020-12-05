@@ -27,7 +27,6 @@ public class Ewoks {
 
     private static class Singleton {
         private static Ewoks instance = new Ewoks();
-
     }
 
     //initializes ewok collection
@@ -61,7 +60,7 @@ public class Ewoks {
         }
     }
 
-    public boolean acquireEwoks(List<Integer> serialNumbers) {
+    public boolean acquireEwoks(List<Integer> serialNumbers) {//todo check to change to void
         try {
             if (!containsAllSerials(serialNumbers))
                 return false;

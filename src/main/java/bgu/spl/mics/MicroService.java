@@ -151,22 +151,6 @@ public abstract class MicroService implements Runnable {
             messageBus.unregister(this);
         this.terminated = true;
 
-
-
-        /* Eden implementation
-
-        long terminationTime=System.currentTimeMillis();
-
-        Diary diary=Diary.getInstance();
-
-        diary.setLeiaTerminate(terminationTime);
-        diary.setC3POTerminate(terminationTime);
-        diary.setHanSoloTerminate(terminationTime);
-        diary.setR2D2Deactivate(terminationTime);
-        diary.setLandoTerminate(terminationTime);
-
-        terminateCondition=true;*/
-
     }
 
     /**
