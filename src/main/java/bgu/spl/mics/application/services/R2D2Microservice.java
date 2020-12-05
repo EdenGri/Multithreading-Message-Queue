@@ -29,7 +29,8 @@ public class R2D2Microservice extends MicroService {
     protected void initialize() {
         DeactivationEventCallback DeactivationEventCB=new DeactivationEventCallback();
         subscribeEvent(DeactivationEvent.class, DeactivationEventCB);
-        subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {         //did this is microservice idk if should do it here? todo check
+
+        subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
             Diary.getInstance().setR2D2Terminate(System.currentTimeMillis());
             terminate();
         });

@@ -60,19 +60,6 @@ public class Ewoks {
             }
         }
     }
-    //stimulates the execution of a mission by calling sleep
-    public void executeMission(List<Integer> serialNumbers, int time){ //todo check if this needs to be here or other place
-        if(!containsAllSerials(serialNumbers))
-            return;
-        if(time > 0){
-            try{
-                Thread.sleep(time);//todo fix/check time
-            } catch (InterruptedException e){
-                e.printStackTrace();
-            }
-            releaseEwoks(serialNumbers);
-        }
-    }
 
     public boolean acquireEwoks(List<Integer> serialNumbers) {
         try {

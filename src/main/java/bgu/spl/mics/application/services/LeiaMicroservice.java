@@ -31,7 +31,8 @@ public class LeiaMicroservice extends MicroService {
             List<Integer> _Serials =attack.getSerials();
     	    AttackEvent newAttackEvent=new AttackEvent(false,_duration,_Serials);
     	    sendEvent(newAttackEvent);
-            subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {         //did this is microservice idk if should do it here? todo check
+
+            subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
                 Diary.getInstance().setLeiaTerminate(System.currentTimeMillis());
                 terminate();
             });

@@ -28,7 +28,8 @@ public class LandoMicroservice  extends MicroService {
     protected void initialize() {
         BombDestroyerEventCallback BombDestroyerEventCB=new BombDestroyerEventCallback();
         subscribeEvent(BombDestroyerEvent.class, BombDestroyerEventCB);
-        subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {         //did this is microservice idk if should do it here? todo check
+
+        subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
             Diary.getInstance().setLandoTerminate(System.currentTimeMillis());
             terminate();
         });

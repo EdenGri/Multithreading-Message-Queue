@@ -183,9 +183,8 @@ public abstract class MicroService implements Runnable {
      */
     @Override
     public final void run() {
-        initialize();
-        subscribeBroadcast(TerminateBroadcast.class, broadcast -> terminate());
         messageBus.register(this);
+        initialize();
         try {
             while (!terminated) {
                 Message message = messageBus.awaitMessage(this);
@@ -194,7 +193,7 @@ public abstract class MicroService implements Runnable {
             }
             messageBus.unregister(this);
         } catch (InterruptedException e){
-            System.out.println("Terminated bla bla..."); //todo change this line to print according to instructions
+            throw new IllegalStateException(e.getMessage());
         }
     }
 

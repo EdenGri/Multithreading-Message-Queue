@@ -29,16 +29,14 @@ public class Main {
 //			System.out.println("Invalid argument");
 //			return;
 //		}
-//		String filePath=args[1];//check if args[0] or args[1]         ASK EDEN WHY SHE DID THIS PART
+//		String filePath=args[1];//check if args[0] or args[1]        * ASK EDEN WHY SHE DID THIS PART
 //		try{
 
 
 
-        Input input = JsonReader.getInputFromJson("/home/spl211/IntellijProjects/Spl-Assignment_2/Input");
-        //todo check if filepath is correct
+        Input input = JsonReader.getInputFromJson("/home/spl211/IntellijProjects/Spl-Assignment_2/Input"); //todo check if filepath is correct
         Ewoks ewoks = Ewoks.getInstance();
         ewoks.load(input.getEwoks());
-
 
         //synchronization aid which allows threads to wait until the mandatory operations are performed by other threads
         //requires 4 threads to be completed before execution of main thread
@@ -63,12 +61,15 @@ public class Main {
         Thread t5 = new Thread(leia);
         t5.start();
 
+        //todo check if need all this join or should delete
         t1.join();
         t2.join();
         t3.join();
         t4.join();
         t5.join();
 
+
+        ////this is all for DEBUG!!! todo delete
         Diary diary = Diary.getInstance();
         System.out.println("Total Attacks: " +diary.getTotalAttacks());
         System.out.println("HanSolo Finish: " +diary.getHanSoloFinish());
@@ -81,21 +82,22 @@ public class Main {
         System.out.println("Lando Terminate: " +diary.getLandoTerminate());
 
 
-        HashMap<String, Object> myDiary = new HashMap<>();
-        myDiary.put("TotalAttacks", diary.getTotalAttacks());
-        myDiary.put("HanSoloFinish", diary.getHanSoloFinish());
-        myDiary.put("C3POFinish", diary.getC3POFinish());
-        myDiary.put("R2D2Deactivate", diary.getR2D2Deactivate());
-        myDiary.put("LeiaTerminate", diary.getLeiaTerminate());
-        myDiary.put("HanSoloTerminate", diary.getHanSoloTerminate());
-        myDiary.put("C3POTerminate", diary.getC3POTerminate());
-        myDiary.put("R2D2Terminate", diary.getR2D2Terminate());
-        myDiary.put("LandoTerminate", diary.getLandoTerminate());
+//        HashMap<String, Object> myDiary = new HashMap<>();
+//        myDiary.put("TotalAttacks", diary.getTotalAttacks());
+//        myDiary.put("HanSoloFinish", diary.getHanSoloFinish());
+//        myDiary.put("C3POFinish", diary.getC3POFinish());
+//        myDiary.put("R2D2Deactivate", diary.getR2D2Deactivate());
+//        myDiary.put("LeiaTerminate", diary.getLeiaTerminate());
+//        myDiary.put("HanSoloTerminate", diary.getHanSoloTerminate());
+//        myDiary.put("C3POTerminate", diary.getC3POTerminate());
+//        myDiary.put("R2D2Terminate", diary.getR2D2Terminate());
+//        myDiary.put("LandoTerminate", diary.getLandoTerminate()); //delete
 
 
         Gson gson = new GsonBuilder().create();
+        Diary myDiary = Diary.getInstance();
         try{
-            FileWriter fileWriter = new FileWriter("./output.json"); //todo check if path is good
+            FileWriter fileWriter = new FileWriter("Output.json"); //todo check if path is good
             gson.toJson(myDiary, fileWriter);
             fileWriter.flush();
             fileWriter.close();
