@@ -25,14 +25,16 @@ public class Main {
 
 
     public static void main(String[] args) throws InterruptedException, IOException {
-//		if (args.length!=2){ //check if args[0] or args[1]
-//			System.out.println("Invalid argument");
-//			return;
-//		}
-//		String filePath=args[1];//check if args[0] or args[1]        * ASK EDEN WHY SHE DID THIS PART
-//		try{
+/*
+        if (args.length!=2){//todo check if args[0] orv args[1]
+            System.out.println("Invalid argument");
+            return;
+        }
+        String filePath=args[1];//todo check if args[0] orv args[1]
+        try{
+        Input input = JsonReader.getInputFromJson(filePath);
 
-
+ */
 
         Input input = JsonReader.getInputFromJson("/home/spl211/IntellijProjects/Spl-Assignment_2/Input"); //todo check if filepath is correct
         Ewoks ewoks = Ewoks.getInstance();

@@ -26,7 +26,7 @@ import java.util.HashMap;
 public abstract class MicroService implements Runnable { 
     private String name;
     private MessageBus messageBus;
-    private HashMap<Class<? extends Message>, Callback> callbacksMap = new HashMap<>();
+    private HashMap<Class<? extends Message>, Callback> callbacksMap;
     private boolean terminated;
 
 

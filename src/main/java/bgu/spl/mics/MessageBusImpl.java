@@ -28,8 +28,8 @@ public class MessageBusImpl implements MessageBus {
 
 
 	private void subscribeGeneral(Class<? extends Message> type, MicroService m){
-	messagesMap.putIfAbsent(type, new ConcurrentLinkedQueue<>());
-	messagesMap.get(type).add(m); //todo check if this line needs to be synchronized (yuval did it synch) (get type)
+		messagesMap.putIfAbsent(type, new ConcurrentLinkedQueue<>());
+		messagesMap.get(type).add(m); //todo check if this line needs to be synchronized (yuval did it synch) (get type)
 	}
 
 	@Override
@@ -57,17 +57,17 @@ public class MessageBusImpl implements MessageBus {
 
 	@Override
 	// A Microservice calls this method to add the broadcast message to queues of all Microservices subscribed to it
-	public void sendBroadcast(Broadcast b) {
-		ConcurrentLinkedQueue<MicroService> microServices;
+	public void sendBroadcast(Broadcast b)  {
+		ConcurrentLinkedQueue<MicroService> subscribers;
 		synchronized (b.getClass()){ //todo not sure this needs to be synchronized
-			microServices = messagesMap.get(b.getClass());
-			if (microServices == null) //if no one is subscribed for this broadcast do nothing
+			subscribers = messagesMap.get(b.getClass());
+			if (subscribers == null) //if no one is subscribed for this broadcast do nothing
 				return;
 		}
 		//traverses through MicroServices subscribed for broadcast and adds broadcast to their message queue
-		for (MicroService i : messagesMap.get(b.getClass())){
+		for (MicroService m : subscribers){
 			try{
-				MicroServiceMap.get(i).put(b);
+				MicroServiceMap.get(m).put(b);
 			} catch (InterruptedException e){
 				e.printStackTrace();
 			}
@@ -79,23 +79,24 @@ public class MessageBusImpl implements MessageBus {
 	public <T> Future<T> sendEvent(Event<T> e) {
 		//fetches all MicroServices subscribed to this type of event
 		ConcurrentLinkedQueue<MicroService> subscribers = messagesMap.get(e.getClass());
+		if (subscribers == null)
+			return null;
+
 		MicroService upNext;
 		Future<T> output = new Future<>();
 		determineFutureMap.put(e, output);
-		if (subscribers == null)
-			return null;
 		synchronized (e.getClass()){
-			if(subscribers.isEmpty())
-				return null;
 			//takes next subscriber from head of message queue and adds him again to the end (in a round-robin manner)
 			upNext = subscribers.poll();
+			if(upNext == null)
+				return null;
 			subscribers.add(upNext);
 		}
 		//adds event message to message queue of the subscriber that was next in line
 		LinkedBlockingQueue<Message> messageQueue;
-		synchronized (upNext){
+		synchronized (upNext){// todo check why we need the synch
 			messageQueue = MicroServiceMap.get(upNext);
-			if(messageQueue == null)
+			if(messageQueue == null) //todo can it be null??
 				return null;
 			messageQueue.add(e);
 		}
@@ -104,25 +105,26 @@ public class MessageBusImpl implements MessageBus {
 
 	@Override
 	public void register(MicroService m) {
-		MicroServiceMap.put(m, new LinkedBlockingQueue<>());
+		MicroServiceMap.putIfAbsent(m, new LinkedBlockingQueue<>());
 	}
 
 	@Override
 	public void unregister(MicroService m) {
 		LinkedBlockingQueue<Message> messageQueue;
 		messagesMap.forEach((t, s) -> {
-			synchronized (t){
+			synchronized (t){//todo check why we need synch ? why on t?
 				s.remove(m);//removes MicroService m from the list of subscribers to that type of message
 			}
 		});
-		synchronized (m){
+		synchronized (m){//todo check why we need synch ?
 			messageQueue = MicroServiceMap.get(m); //returns message queue of specific MicroService in the map
 		}
 		for (Message message : messageQueue){ //changes the output (future) of each message in the queue to null
+			if(message instanceof Broadcast) {
+				continue;
+			}
 			Future<?> future = determineFutureMap.get(message);
-			if(future == null)
-				return;
-			else future.resolve(null);
+			future.resolve(null);
 		}
 		MicroServiceMap.remove(m);
 	}
