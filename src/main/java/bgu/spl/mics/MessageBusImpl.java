@@ -98,7 +98,7 @@ public class MessageBusImpl implements MessageBus {
 		LinkedBlockingQueue<Message> messageQueue;
 		synchronized (upNext){// todo check why we need the synch
 			messageQueue = MicroServiceMap.get(upNext);
-			if(messageQueue == null) //todo can it be null??
+			if(messageQueue == null)
 				return null;
 			messageQueue.add(e);
 		}

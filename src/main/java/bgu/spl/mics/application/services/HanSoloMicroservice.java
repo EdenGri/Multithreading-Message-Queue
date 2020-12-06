@@ -39,10 +39,10 @@ public class HanSoloMicroservice extends MicroService {
             try {
                 Thread.sleep(attack.getDuration());
             } catch (InterruptedException e){
-                e.printStackTrace();
+                e.printStackTrace(); //todo check
             }
             ewoks.releaseEwoks(resources);
-            complete(c, true); //when we transfer this to the microservices then this line will not be red
+            complete(c, true);
             Diary diary=Diary.getInstance();
             diary.setHanSoloFinish(System.currentTimeMillis());
             diary.incrementTotalAttacks();

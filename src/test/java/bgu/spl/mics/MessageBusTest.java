@@ -63,13 +63,13 @@ public class MessageBusTest {
 
     @Test
     public void testComplete() {
-        Event event = new EventExmpl("EventComp");
+        EventExmpl event = new EventExmpl("EventComp");
         assertThrows(NullPointerException.class, () -> messageBus.complete(event, null));
         assertThrows(NullPointerException.class, () -> messageBus.complete(null, "true"));
         ExampleEventService m1 = new ExampleEventService();
-        m1.initialize();
         messageBus.register(m1);
-        Future<String> future = messageBus.sendEvent(exampleEvent);
+        m1.initialize();
+        Future<String> future = messageBus.sendEvent(event);
         assertFalse(future.isDone());
         messageBus.complete(exampleEvent, "true");
         assertEquals(future.get(), "true");
@@ -83,7 +83,6 @@ public class MessageBusTest {
         messageBus.subscribeBroadcast(BroadcastExmpl.class, m1);
         messageBus.sendBroadcast(exampleBroadcast);
         assertEquals(messageBus.awaitMessage(m1), exampleBroadcast);
-
 
         ExampleEventService m2 = new ExampleEventService();
         messageBus.register(m2);

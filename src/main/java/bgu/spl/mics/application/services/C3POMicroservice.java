@@ -43,12 +43,12 @@ public class C3POMicroservice extends MicroService {
                 e.printStackTrace();// todo check why we need this
             }
             ewoks.releaseEwoks(resources);
-            complete(c, true); //when we transfer this to the microservices then this line will not be red
+            complete(c, true);
             Diary diary=Diary.getInstance();
             diary.setC3POFinish(System.currentTimeMillis());
             diary.incrementTotalAttacks();
         });
-        subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {         //did this is microservice idk if should do it here? todo check
+        subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
             Diary.getInstance().setC3POTerminate(System.currentTimeMillis());
             terminate();
         });
