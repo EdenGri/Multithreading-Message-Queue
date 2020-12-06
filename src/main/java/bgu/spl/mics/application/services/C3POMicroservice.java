@@ -24,7 +24,7 @@ public class C3POMicroservice extends MicroService {
     private CountDownLatch latch;
 
 	
-    public C3POMicroservice(CountDownLatch latch) {
+    public C3POMicroservice() {
         super("C3PO");
         ewoks = Ewoks.getInstance();
         this.latch = latch;

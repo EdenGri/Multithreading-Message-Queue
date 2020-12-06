@@ -48,9 +48,10 @@ public class Ewoks {
     public void releaseEwoks(List<Integer> serialNumbers) {
         if(!containsAllSerials(serialNumbers))
             return;
+        serialNumbers.sort(Comparator.naturalOrder());
         for (int number : serialNumbers) {
             Ewok ewok;
-            synchronized (ewokMap){
+            synchronized (ewokMap){//todo check if need sync
                 ewok = ewokMap.get(number);
             }
             synchronized (ewok) {
@@ -67,7 +68,7 @@ public class Ewoks {
             serialNumbers.sort(Comparator.naturalOrder());
             for(int num : serialNumbers){
                 Ewok ewok;
-                synchronized (ewokMap){
+                synchronized (ewokMap){//todo check if need sync
                     ewok = ewokMap.get(num);
                 }
                 synchronized (ewok){

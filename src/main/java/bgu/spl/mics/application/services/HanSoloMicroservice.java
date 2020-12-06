@@ -22,7 +22,7 @@ public class HanSoloMicroservice extends MicroService {
     private Ewoks ewoks;
     private CountDownLatch latch;
 
-    public HanSoloMicroservice(CountDownLatch latch) {
+    public HanSoloMicroservice() {
         super("Han");
         ewoks = Ewoks.getInstance();
         this.latch = latch;

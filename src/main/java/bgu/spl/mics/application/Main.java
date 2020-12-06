@@ -23,37 +23,31 @@ import static bgu.spl.mics.application.passiveObjects.JsonReader.getInputFromJso
 
 public class Main {
 
-
+    public static CountDownLatch countDownLatch= new CountDownLatch(4);
     public static void main(String[] args) throws InterruptedException, IOException {
-/*
-        if (args.length!=2){//todo check if args[0] orv args[1]
+       /* if (args.length!=2){//todo check if args[0] orv args[1]
             System.out.println("Invalid argument");
             return;
         }
-        String filePath=args[1];//todo check if args[0] orv args[1]
-        try{
-        Input input = JsonReader.getInputFromJson(filePath);
-
- */
-
-        Input input = JsonReader.getInputFromJson("/home/spl211/IntellijProjects/Spl-Assignment_2/Input"); //todo check if filepath is correct
+        String filePath=args[0];//todo check if args[0] orv args[1]*/
+        Input input = JsonReader.getInputFromJson("input.json");
         Ewoks ewoks = Ewoks.getInstance();
         ewoks.load(input.getEwoks());
 
         //synchronization aid which allows threads to wait until the mandatory operations are performed by other threads
         //requires 4 threads to be completed before execution of main thread
-        CountDownLatch countDownLatch = new CountDownLatch(4);
 
-        C3POMicroservice c3po = new C3POMicroservice(countDownLatch);
+
+        C3POMicroservice c3po = new C3POMicroservice();
         Thread t1 = new Thread(c3po);
         t1.start();
-        HanSoloMicroservice hsnSolo = new HanSoloMicroservice(countDownLatch);
+        HanSoloMicroservice hsnSolo = new HanSoloMicroservice();
         Thread t2 = new Thread(hsnSolo);
         t2.start();
-        R2D2Microservice r2d2 = new R2D2Microservice(input.getR2D2(), countDownLatch);
+        R2D2Microservice r2d2 = new R2D2Microservice(input.getR2D2());
         Thread t3 = new Thread(r2d2);
         t3.start();
-        LandoMicroservice lando = new LandoMicroservice(input.getLando(), countDownLatch);
+        LandoMicroservice lando = new LandoMicroservice(input.getLando());
         Thread t4 = new Thread(lando);
         t4.start();
 

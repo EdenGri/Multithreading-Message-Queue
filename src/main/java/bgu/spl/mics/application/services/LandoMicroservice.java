@@ -18,7 +18,7 @@ public class LandoMicroservice  extends MicroService {
     long duration;
 
 
-    public LandoMicroservice(long duration, CountDownLatch latch) {
+    public LandoMicroservice(long duration) {
         super("Lando");
         duration=duration;
         this.latch = latch;
