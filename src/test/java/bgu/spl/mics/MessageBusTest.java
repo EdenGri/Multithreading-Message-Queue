@@ -68,12 +68,12 @@ public class MessageBusTest {
         assertThrows(NullPointerException.class, () -> messageBus.complete(null, "true"));
         ExampleEventService m1 = new ExampleEventService();
         m1.initialize();
+        messageBus.register(m1);
         Future<String> future = messageBus.sendEvent(exampleEvent);
         assertFalse(future.isDone());
         messageBus.complete(exampleEvent, "true");
         assertEquals(future.get(), "true");
         assertTrue(future.isDone());
-
     }
 
     @Test

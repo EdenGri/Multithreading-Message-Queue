@@ -51,7 +51,7 @@ public class Ewoks {
         for (int number : serialNumbers) {
             Ewok ewok;
             synchronized (ewokMap){
-                    ewok = ewokMap.get(number);
+                ewok = ewokMap.get(number);
             }
             synchronized (ewok) {
                 ewok.release();

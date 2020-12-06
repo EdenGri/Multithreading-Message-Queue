@@ -59,6 +59,8 @@ public class MessageBusImpl implements MessageBus {
 	// A Microservice calls this method to add the broadcast message to queues of all Microservices subscribed to it
 	public void sendBroadcast(Broadcast b)  {
 		ConcurrentLinkedQueue<MicroService> subscribers;
+
+
 		synchronized (b.getClass()){ //todo not sure this needs to be synchronized
 			subscribers = messagesMap.get(b.getClass());
 			if (subscribers == null) //if no one is subscribed for this broadcast do nothing
