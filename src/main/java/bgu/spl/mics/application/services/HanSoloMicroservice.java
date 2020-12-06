@@ -1,6 +1,7 @@
 package bgu.spl.mics.application.services;
 
 import bgu.spl.mics.MicroService;
+import bgu.spl.mics.application.Main;
 import bgu.spl.mics.application.messages.AttackEvent;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
 import bgu.spl.mics.application.passiveObjects.Attack;
@@ -20,12 +21,10 @@ import java.util.concurrent.CountDownLatch;
  */
 public class HanSoloMicroservice extends MicroService {
     private Ewoks ewoks;
-    private CountDownLatch latch;
 
     public HanSoloMicroservice() {
         super("Han");
         ewoks = Ewoks.getInstance();
-        this.latch = latch;
     }
 
 
@@ -51,6 +50,6 @@ public class HanSoloMicroservice extends MicroService {
             Diary.getInstance().setHanSoloTerminate(System.currentTimeMillis());
             terminate();
         });
-        latch.countDown();
+        Main.countDownLatch.countDown();
     }
 }

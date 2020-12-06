@@ -1,5 +1,6 @@
 package bgu.spl.mics.application.services;
 import bgu.spl.mics.MicroService;
+import bgu.spl.mics.application.Main;
 import bgu.spl.mics.application.messages.BombDestroyerEvent;
 import bgu.spl.mics.application.messages.DeactivationEvent;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
@@ -16,13 +17,11 @@ import java.util.concurrent.CountDownLatch;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class R2D2Microservice extends MicroService {
-    private CountDownLatch latch;
     long duration;
 
 
     public R2D2Microservice(long duration) {
         super("R2D2");
-        this.latch = latch;
         duration=duration;
     }
 
@@ -40,7 +39,7 @@ public class R2D2Microservice extends MicroService {
             Diary.getInstance().setR2D2Terminate(System.currentTimeMillis());
             terminate();
         });
-        latch.countDown();
+        Main.countDownLatch.countDown();
     }
 
     private long getDuration() {

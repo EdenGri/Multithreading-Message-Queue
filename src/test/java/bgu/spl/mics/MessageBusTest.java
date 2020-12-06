@@ -63,8 +63,7 @@ public class MessageBusTest {
 
     @Test
     public void testComplete() {
-        EventExmpl event = new EventExmpl("EventComp");
-        assertThrows(NullPointerException.class, () -> messageBus.complete(event, null));
+        assertThrows(NullPointerException.class, () -> messageBus.complete(exampleEvent, null));
         assertThrows(NullPointerException.class, () -> messageBus.complete(null, "true"));
         ExampleEventService m1 = new ExampleEventService();
         m1.initialize();

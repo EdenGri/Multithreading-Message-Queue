@@ -2,6 +2,7 @@ package bgu.spl.mics.application.services;
 
 
 import bgu.spl.mics.MicroService;
+import bgu.spl.mics.application.Main;
 import bgu.spl.mics.application.messages.BombDestroyerEvent;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
 import bgu.spl.mics.application.passiveObjects.Diary;
@@ -14,14 +15,12 @@ import java.util.concurrent.CountDownLatch;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class LandoMicroservice  extends MicroService {
-    private CountDownLatch latch;
     long duration;
 
 
     public LandoMicroservice(long duration) {
         super("Lando");
         duration=duration;
-        this.latch = latch;
     }
 
     @Override
@@ -39,7 +38,7 @@ public class LandoMicroservice  extends MicroService {
             terminate();
         });
 
-        latch.countDown();
+        Main.countDownLatch.countDown();
 
     }
 
