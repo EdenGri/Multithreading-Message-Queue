@@ -31,6 +31,10 @@ public class Diary {
         totalAttacks.getAndIncrement();
      }
 
+    public void resetTotalAttacks(){//todo delete
+        totalAttacks=new AtomicInteger(0);
+    }
+
     private Diary(){}
 
     public AtomicInteger getTotalAttacks() {
