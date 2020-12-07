@@ -31,7 +31,9 @@ public class Diary {
         totalAttacks.getAndIncrement();
      }
 
-    private Diary(){}//todo default constructor
+    private Diary(){
+        totalAttacks = new AtomicInteger();
+    }//todo default constructor
 
     public AtomicInteger getTotalAttacks() {
         return totalAttacks;

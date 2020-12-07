@@ -107,7 +107,7 @@ public class MessageBusImpl implements MessageBus {
 
 	@Override
 	public void register(MicroService m) {
-		MicroServiceMap.putIfAbsent(m, new LinkedBlockingQueue<>());
+		MicroServiceMap.put(m, new LinkedBlockingQueue<>());
 	} //todo check
 
 	@Override
@@ -126,6 +126,7 @@ public class MessageBusImpl implements MessageBus {
 				continue;
 			}
 			Future<?> future = determineFutureMap.get(message);
+			if(future != null)
 			future.resolve(null);
 		}
 		MicroServiceMap.remove(m);
