@@ -48,8 +48,8 @@ public class C3POMicroservice extends MicroService {
             diary.incrementTotalAttacks();
         });
         subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
-            Diary.getInstance().setC3POTerminate(System.currentTimeMillis());
             terminate();
+            Diary.getInstance().setC3POTerminate(System.currentTimeMillis());
         });
         Main.countDownLatch.countDown();
     }

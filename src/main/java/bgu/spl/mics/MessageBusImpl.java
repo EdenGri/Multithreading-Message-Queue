@@ -107,7 +107,7 @@ public class MessageBusImpl implements MessageBus {
 
 	@Override
 	public void register(MicroService m) {
-		MicroServiceMap.put(m, new LinkedBlockingQueue<>());
+		MicroServiceMap.putIfAbsent(m, new LinkedBlockingQueue<>());
 	} //todo check
 
 	@Override
@@ -121,15 +121,15 @@ public class MessageBusImpl implements MessageBus {
 		synchronized (m){//todo check why we need synch ?
 			messageQueue = MicroServiceMap.get(m); //returns message queue of specific MicroService in the map
 		}
-		for (Message message : messageQueue){ //changes the output (future) of each message in the queue to null
-			if(message instanceof Broadcast) {
-				continue;
+			for (Message message : messageQueue) { //changes the output (future) of each message in the queue to null
+				if (message instanceof Broadcast) {
+					continue;
+				}
+				Future<?> future = determineFutureMap.get(message);
+				if (future != null)
+					future.resolve(null);
 			}
-			Future<?> future = determineFutureMap.get(message);
-			if(future != null)
-			future.resolve(null);
-		}
-		MicroServiceMap.remove(m);
+			MicroServiceMap.remove(m);
 	}
 
 	@Override

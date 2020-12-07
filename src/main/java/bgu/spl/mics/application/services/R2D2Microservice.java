@@ -30,14 +30,16 @@ public class R2D2Microservice extends MicroService {
         subscribeEvent(DeactivationEvent.class, (c) -> {
             try {
             Thread.sleep(getDuration());
+            complete(c, true);//todo check if the future result needs to be true?
+            Diary.getInstance().setR2D2Deactivate(System.currentTimeMillis());
             }catch (InterruptedException e){
                 e.printStackTrace();// todo check why we need this
             }
         });
 
         subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
-            Diary.getInstance().setR2D2Terminate(System.currentTimeMillis());
             terminate();
+            Diary.getInstance().setR2D2Terminate(System.currentTimeMillis());
         });
         Main.countDownLatch.countDown();
     }

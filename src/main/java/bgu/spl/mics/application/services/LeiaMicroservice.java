@@ -29,6 +29,11 @@ public class LeiaMicroservice extends MicroService {
 
     @Override
     protected void initialize() {
+        subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
+            terminate();
+            Diary.getInstance().setLeiaTerminate(System.currentTimeMillis());
+        });//todo check place
+
         ArrayList<Future<Boolean>> attacksStatuses=new ArrayList<>();
     	for (Attack attack:attacks) {
             AttackEvent newAttackEvent = new AttackEvent(attack);
@@ -43,14 +48,10 @@ public class LeiaMicroservice extends MicroService {
     	futureDeactivation.get();
 
         Future futureBombDestroyer =sendEvent(new BombDestroyerEvent());
-        futureBombDestroyer.get();
 
-        subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
-            Diary.getInstance().setLeiaTerminate(System.currentTimeMillis());
-            terminate();
-        });
 
-        sendBroadcast(new TerminateBroadcast());//todo check if it needs to be lando who send the terminateBroadcast
+
+
 
 
 

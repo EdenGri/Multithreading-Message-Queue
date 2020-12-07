@@ -65,6 +65,7 @@ public class Main {
         t5.join();
 
 
+
         ////this is all for DEBUG!!! todo delete
         Diary diary = Diary.getInstance();
         System.out.println("Total Attacks: " +diary.getTotalAttacks());

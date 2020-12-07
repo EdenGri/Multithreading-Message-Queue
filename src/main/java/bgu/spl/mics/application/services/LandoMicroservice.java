@@ -28,15 +28,15 @@ public class LandoMicroservice  extends MicroService {
         subscribeEvent(BombDestroyerEvent.class, (c)->{//todo delete the c
             try {
                 Thread.sleep(getDuration());
+                complete(c, true);//todo check if the future result needs to be true?
+                sendBroadcast(new TerminateBroadcast());//todo check if it needs to be lando who send the terminateBroadcast
+                terminate();
+                Diary.getInstance().setLandoTerminate(System.currentTimeMillis());
             }catch (InterruptedException e){
                 e.printStackTrace();// todo check why we need this
             }
         });
 
-        subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
-            Diary.getInstance().setLandoTerminate(System.currentTimeMillis());
-            terminate();
-        });
 
         Main.countDownLatch.countDown();
 

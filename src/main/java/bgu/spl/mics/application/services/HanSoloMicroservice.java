@@ -47,8 +47,8 @@ public class HanSoloMicroservice extends MicroService {
             diary.incrementTotalAttacks();
         });
         subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
-            Diary.getInstance().setHanSoloTerminate(System.currentTimeMillis());
             terminate();
+            Diary.getInstance().setHanSoloTerminate(System.currentTimeMillis());
         });
         Main.countDownLatch.countDown();
     }
