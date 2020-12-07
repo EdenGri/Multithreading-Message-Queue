@@ -36,7 +36,7 @@ public class Future<T> {
             try {
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace(); //todo put something in this line like s.o.p
+                e.printStackTrace();
             }
         }
         return result;
@@ -78,7 +78,7 @@ public class Future<T> {
                 this.wait(timeToWait);
 
         } catch (InterruptedException e) {
-            throw new IllegalStateException(e.getMessage()); //todo maybe s.o.p error num instead
+            e.printStackTrace();
         }
 
         return result;

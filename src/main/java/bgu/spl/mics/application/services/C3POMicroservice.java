@@ -32,16 +32,7 @@ public class C3POMicroservice extends MicroService {
     @Override
     protected void initialize() {
         subscribeEvent(AttackEvent.class, (c) -> {
-            Attack attack = c.getAttack();
-            List<Integer> resources = attack.getSerials();
-            Ewoks ewoks = Ewoks.getInstance();
-            ewoks.acquireEwoks(resources);
-            try {
-                Thread.sleep(attack.getDuration());
-            } catch (InterruptedException e){
-                e.printStackTrace();// todo check why we need this
-            }
-            ewoks.releaseEwoks(resources);
+            c.executeAttack();
             complete(c, true);
             Diary diary=Diary.getInstance();
             diary.setC3POFinish(System.currentTimeMillis());

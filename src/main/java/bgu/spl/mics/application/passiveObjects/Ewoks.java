@@ -31,7 +31,7 @@ public class Ewoks {
 
     //initializes ewok collection
     //adds all ewoks to the collection
-    public void load(int ewoksNum) { //todo check this
+    public void load(int ewoksNum) {
         synchronized (ewokMap) {
             for (int i = 1; i <= ewoksNum; i++) {
                 ewokMap.put(i, new Ewok(i));
@@ -61,10 +61,10 @@ public class Ewoks {
         }
     }
 
-    public boolean acquireEwoks(List<Integer> serialNumbers) {//todo check to change to void
+    public void acquireEwoks(List<Integer> serialNumbers) {
         try {
             if (!containsAllSerials(serialNumbers))
-                return false;
+                return;
             serialNumbers.sort(Comparator.naturalOrder());
             for(int num : serialNumbers){
                 Ewok ewok;
@@ -79,9 +79,6 @@ public class Ewoks {
                 }
             }
 
-        } catch (InterruptedException e){
-            return false;
-        }
-        return true;
+        } catch (InterruptedException e){}
     }
 }

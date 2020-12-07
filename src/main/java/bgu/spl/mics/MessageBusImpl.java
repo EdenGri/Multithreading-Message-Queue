@@ -29,12 +29,12 @@ public class MessageBusImpl implements MessageBus {
 
 	private void subscribeGeneral(Class<? extends Message> type, MicroService m){
 		messagesMap.putIfAbsent(type, new ConcurrentLinkedQueue<>());
-		messagesMap.get(type).add(m); //todo check if this line needs to be synchronized (yuval did it synch) (get type)
+		messagesMap.get(type).add(m);
 	}
 
 	@Override
 	// A Microservice calls this method to subscribe itself for some type event
-	public <T> void subscribeEvent(Class<? extends Event<T>> type, MicroService m) {
+	public <T> void subscribeEvent(Class<? extends Event<T>> type, MicroService m) {//todo we need to check if m register?
 		if (type==null || m==null)
 			throw new NullPointerException();
 		subscribeGeneral(type, m);
@@ -59,8 +59,6 @@ public class MessageBusImpl implements MessageBus {
 	// A Microservice calls this method to add the broadcast message to queues of all Microservices subscribed to it
 	public void sendBroadcast(Broadcast b)  {
 		ConcurrentLinkedQueue<MicroService> subscribers;
-
-
 		synchronized (b.getClass()){ //todo not sure this needs to be synchronized
 			subscribers = messagesMap.get(b.getClass());
 			if (subscribers == null) //if no one is subscribed for this broadcast do nothing
