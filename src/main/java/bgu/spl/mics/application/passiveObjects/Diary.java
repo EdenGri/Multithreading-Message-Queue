@@ -32,7 +32,7 @@ public class Diary {
      }
 
     private Diary(){
-        totalAttacks = new AtomicInteger();
+        totalAttacks = new AtomicInteger(0);
     }//todo default constructor
 
     public AtomicInteger getTotalAttacks() {
