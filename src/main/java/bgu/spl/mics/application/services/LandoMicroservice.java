@@ -20,7 +20,7 @@ public class LandoMicroservice  extends MicroService {
 
     public LandoMicroservice(long duration) {
         super("Lando");
-        duration=duration;
+        this.duration=duration;
     }
 
     @Override

@@ -22,7 +22,7 @@ public class R2D2Microservice extends MicroService {
 
     public R2D2Microservice(long duration) {
         super("R2D2");
-        duration=duration;
+        this.duration=duration;
     }
 
     @Override
