@@ -2,7 +2,6 @@ package bgu.spl.mics.application.passiveObjects;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.ArrayList;
 import java.util.List;
 
 

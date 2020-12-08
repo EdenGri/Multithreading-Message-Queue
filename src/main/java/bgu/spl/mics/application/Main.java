@@ -10,7 +10,6 @@ import com.google.gson.GsonBuilder;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
 import static bgu.spl.mics.application.passiveObjects.JsonReader.getInputFromJson;
@@ -25,12 +24,12 @@ public class Main {
 
     public static CountDownLatch countDownLatch= new CountDownLatch(4);
     public static void main(String[] args) throws InterruptedException, IOException {
-       /* if (args.length!=2){//todo check if args[0] orv args[1]
+       if (args.length!=2){ //todo check if args[0] orv args[1]
             System.out.println("Invalid argument");
             return;
         }
-        String filePath=args[0];//todo check if args[0] orv args[1]*/
-        Input input = JsonReader.getInputFromJson("input.json");
+        String filePath = args[0];
+        Input input = JsonReader.getInputFromJson(filePath);
         Ewoks ewoks = Ewoks.getInstance();
         ewoks.load(input.getEwoks());
 
@@ -67,6 +66,7 @@ public class Main {
 
 
         ////this is all for DEBUG!!! todo delete
+
         Diary diary = Diary.getInstance();
         System.out.println("Total Attacks: " +diary.getTotalAttacks());
         System.out.println("HanSolo Finish: " +diary.getHanSoloFinish());
@@ -79,27 +79,16 @@ public class Main {
         System.out.println("Lando Terminate: " +diary.getLandoTerminate());
 
 
-//        HashMap<String, Object> myDiary = new HashMap<>();
-//        myDiary.put("TotalAttacks", diary.getTotalAttacks());
-//        myDiary.put("HanSoloFinish", diary.getHanSoloFinish());
-//        myDiary.put("C3POFinish", diary.getC3POFinish());
-//        myDiary.put("R2D2Deactivate", diary.getR2D2Deactivate());
-//        myDiary.put("LeiaTerminate", diary.getLeiaTerminate());
-//        myDiary.put("HanSoloTerminate", diary.getHanSoloTerminate());
-//        myDiary.put("C3POTerminate", diary.getC3POTerminate());
-//        myDiary.put("R2D2Terminate", diary.getR2D2Terminate());
-//        myDiary.put("LandoTerminate", diary.getLandoTerminate()); //delete
-
 
         Gson gson = new GsonBuilder().create();
         Diary myDiary = Diary.getInstance();
         try{
-            FileWriter fileWriter = new FileWriter("Output.json"); //todo check if path is good
+            FileWriter fileWriter = new FileWriter(args[1]);
             gson.toJson(myDiary, fileWriter);
             fileWriter.flush();
             fileWriter.close();
         } catch(Exception e){
-
+            e.printStackTrace();
         }
 
 

@@ -17,7 +17,7 @@ public class MessageBusImpl implements MessageBus {
 	private ConcurrentHashMap<MicroService, LinkedBlockingQueue<Message>> MicroServiceMap = new ConcurrentHashMap<>();
 
 	private static class Singleton {
-		private static MessageBusImpl instance = new MessageBusImpl();//todo check if to add final
+		private static MessageBusImpl instance = new MessageBusImpl();
 	}
 
 	public static MessageBusImpl getInstance(){//todo check if the instance need to be MessageBusImpl or MessageBus
@@ -94,7 +94,7 @@ public class MessageBusImpl implements MessageBus {
 		}
 		//adds event message to message queue of the subscriber that was next in line
 		LinkedBlockingQueue<Message> messageQueue;
-		synchronized (upNext){// todo check why we need the synch
+		synchronized (upNext){ // todo check why we need the synch
 			messageQueue = MicroServiceMap.get(upNext);
 			if(messageQueue == null)
 				return null;

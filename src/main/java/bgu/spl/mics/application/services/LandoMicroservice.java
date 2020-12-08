@@ -37,7 +37,6 @@ public class LandoMicroservice  extends MicroService {
             }
         });
 
-
         Main.countDownLatch.countDown();
 
     }

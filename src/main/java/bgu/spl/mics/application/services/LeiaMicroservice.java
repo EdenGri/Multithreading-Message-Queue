@@ -1,6 +1,5 @@
 package bgu.spl.mics.application.services;
 import java.util.ArrayList;
-import java.util.List;
 
 import bgu.spl.mics.*;
 import bgu.spl.mics.application.messages.AttackEvent;
@@ -32,9 +31,10 @@ public class LeiaMicroservice extends MicroService {
         subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
             terminate();
             Diary.getInstance().setLeiaTerminate(System.currentTimeMillis());
-        });//todo check place
+        });
 
-        ArrayList<Future<Boolean>> attacksStatuses=new ArrayList<>();
+        ArrayList<Future<Boolean>> attacksStatuses = new ArrayList<>();
+
     	for (Attack attack:attacks) {
             AttackEvent newAttackEvent = new AttackEvent(attack);
             Future futureAttack = sendEvent(newAttackEvent);
@@ -44,10 +44,10 @@ public class LeiaMicroservice extends MicroService {
     	    futureAttack.get();
         }
 
-        Future futureDeactivation =sendEvent(new DeactivationEvent());
+        Future futureDeactivation = sendEvent(new DeactivationEvent());
     	futureDeactivation.get();
 
-        Future futureBombDestroyer =sendEvent(new BombDestroyerEvent());
+        Future futureBombDestroyer = sendEvent(new BombDestroyerEvent());
 
 
 

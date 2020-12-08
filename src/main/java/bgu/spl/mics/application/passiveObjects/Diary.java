@@ -24,7 +24,7 @@ public class Diary {
     }
 
     private static class Singleton {
-        private static Diary diary=new Diary();//todo check if to add final
+        private static Diary diary=new Diary();
     }
 
      public void incrementTotalAttacks(){
@@ -33,7 +33,7 @@ public class Diary {
 
     public void resetTotalAttacks(){//todo delete
         totalAttacks=new AtomicInteger(0);
-    }
+    } //todo delete
 
     private Diary(){}
 
