@@ -50,9 +50,7 @@ public class Ewoks {
         serialNumbers.sort(Comparator.naturalOrder());
         for (int number : serialNumbers) {
             Ewok ewok;
-            synchronized (ewokMap){//todo check if need sync
-                ewok = ewokMap.get(number);
-            }
+            ewok = ewokMap.get(number); //*** synch was here
             synchronized (ewok) {
                 ewok.release();
                 ewok.notifyAll();
@@ -67,9 +65,7 @@ public class Ewoks {
             serialNumbers.sort(Comparator.naturalOrder());
             for(int num : serialNumbers){
                 Ewok ewok;
-                synchronized (ewokMap){//todo check if need sync
-                    ewok = ewokMap.get(num);
-                }
+                ewok = ewokMap.get(num); //*** synch was here
                 synchronized (ewok){
                     while(!ewok.isAvailable()){
                         ewok.wait();
