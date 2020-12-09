@@ -45,12 +45,14 @@ public class Ewoks {
     }
 
     public void releaseEwoks(List<Integer> serialNumbers) {
+        //validates input
         if(!containsAllSerials(serialNumbers))
             return;
         serialNumbers.sort(Comparator.naturalOrder());
         for (int number : serialNumbers) {
             Ewok ewok;
-            ewok = ewokMap.get(number); //*** synch was here
+            ewok = ewokMap.get(number);
+            //releases ewok and notifies its release
             synchronized (ewok) {
                 ewok.release();
                 ewok.notifyAll();
@@ -60,12 +62,14 @@ public class Ewoks {
 
     public void acquireEwoks(List<Integer> serialNumbers) {
         try {
+            //validates input
             if (!containsAllSerials(serialNumbers))
                 return;
             serialNumbers.sort(Comparator.naturalOrder());
             for(int num : serialNumbers){
                 Ewok ewok;
-                ewok = ewokMap.get(num); //*** synch was here
+                ewok = ewokMap.get(num);
+                //waits until specific ewok we want is available
                 synchronized (ewok){
                     while(!ewok.isAvailable()){
                         ewok.wait();

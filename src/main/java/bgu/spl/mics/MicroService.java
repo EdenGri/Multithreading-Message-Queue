@@ -35,6 +35,7 @@ public abstract class MicroService implements Runnable {
      *             does not have to be unique)
      */
     public MicroService(String name) {
+        //initializing all fields
         this.name = name;
         messageBusImpl = MessageBusImpl.getInstance();
         callbacksMap = new HashMap<>();
@@ -66,6 +67,7 @@ public abstract class MicroService implements Runnable {
      */
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
         messageBusImpl.subscribeEvent(type, this);
+        //adds event type with according callback to callbacks map
         callbacksMap.put(type, callback);
     }
 
@@ -92,6 +94,7 @@ public abstract class MicroService implements Runnable {
      */
     protected final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) {
         messageBusImpl.subscribeBroadcast(type, this);
+        //adds broadcast with according callback to callbacks map
         callbacksMap.put(type, callback);
     }
 
@@ -168,8 +171,11 @@ public abstract class MicroService implements Runnable {
      */
     @Override
     public final void run() {
+        //registers service
         messageBusImpl.register(this);
+        //initializes service
         initialize();
+        //while not finished, fetch next message waiting and activate specific callback
         while (!terminated) {
             try {
                 Message message = messageBusImpl.awaitMessage(this);
@@ -178,7 +184,8 @@ public abstract class MicroService implements Runnable {
             } catch (InterruptedException e) {
             }
         }
-       messageBusImpl.unregister(this);
+        //unregisters service
+        messageBusImpl.unregister(this);
     }
 
 }

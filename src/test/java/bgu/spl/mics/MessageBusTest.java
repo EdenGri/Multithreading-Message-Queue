@@ -18,9 +18,10 @@ public class MessageBusTest {
 
     @BeforeEach
     public void setUp() {
+        messageBus = MessageBusImpl.getInstance();
         exampleEvent = new EventExmpl("ofry");
         exampleBroadcast = new BroadcastExmpl("eden");
-        messageBus = MessageBusImpl.getInstance();
+
     }
 
     @Test
@@ -33,13 +34,15 @@ public class MessageBusTest {
     //tests event in general (subscribe & send)
     public void testSubscribeEvent() throws InterruptedException {
         ExampleEventService m1 = new ExampleEventService();
+        Message message;
         assertThrows(NullPointerException.class, () -> messageBus.subscribeEvent(null, m1));
         assertThrows(NullPointerException.class, () -> messageBus.subscribeEvent(EventExmpl.class, null));
         messageBus.register(m1);
         messageBus.subscribeEvent(EventExmpl.class, m1);
         Future future = messageBus.sendEvent(exampleEvent);
         assertNotNull(future);
-        Message message = messageBus.awaitMessage(m1);
+        messageBus.sendEvent(exampleEvent);
+        message = messageBus.awaitMessage(m1);
         assertSame(exampleEvent, message);
     }
 
@@ -66,8 +69,8 @@ public class MessageBusTest {
         assertThrows(NullPointerException.class, () -> messageBus.complete(exampleEvent, null));
         assertThrows(NullPointerException.class, () -> messageBus.complete(null, "true"));
         ExampleEventService m1 = new ExampleEventService();
-        m1.initialize();
         messageBus.register(m1);
+        m1.initialize();
         Future<String> future = messageBus.sendEvent(exampleEvent);
         assertFalse(future.isDone());
         messageBus.complete(exampleEvent, "true");
@@ -82,12 +85,6 @@ public class MessageBusTest {
         messageBus.subscribeBroadcast(BroadcastExmpl.class, m1);
         messageBus.sendBroadcast(exampleBroadcast);
         assertEquals(messageBus.awaitMessage(m1), exampleBroadcast);
-
-        ExampleEventService m2 = new ExampleEventService();
-        messageBus.register(m2);
-        messageBus.subscribeEvent(EventExmpl.class, m2);
-        messageBus.sendEvent(exampleEvent);
-        assertEquals(messageBus.awaitMessage(m2), exampleEvent);
 
     }
 

@@ -32,6 +32,7 @@ public class Future<T> {
      * @return return the result of type T if it is available, if not wait until it is available.
      */
     public synchronized T get() {
+        //returns result type if available or waits until is available
         while (!isDone) {
             try {
                 wait();
@@ -39,6 +40,7 @@ public class Future<T> {
                 e.printStackTrace();
             }
         }
+
         return result;
     }
 
@@ -72,6 +74,7 @@ public class Future<T> {
      * elapsed, return null.
      */
     public synchronized T get(long timeout, TimeUnit unit) {
+        //returns result if available or waits for specific time until might be available
         long timeToWait = unit.toMillis(timeout);
         try {
             if (!this.isDone)

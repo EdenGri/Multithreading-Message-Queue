@@ -31,12 +31,16 @@ public class C3POMicroservice extends MicroService {
     @Override
     protected void initialize() {
         subscribeEvent(AttackEvent.class, (c) -> {
+            // executes attack mission
             c.executeAttack();
             complete(c, true);
             Diary diary=Diary.getInstance();
+            //sets finish time when finished
             diary.setC3POFinish(System.currentTimeMillis());
+            //increases total attacks by one after the attack execution
             diary.incrementTotalAttacks();
         });
+        //subscribes to termination broadcast
         subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
             terminate();
             Diary.getInstance().setC3POTerminate(System.currentTimeMillis());

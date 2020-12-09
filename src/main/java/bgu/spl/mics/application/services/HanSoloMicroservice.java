@@ -30,12 +30,16 @@ public class HanSoloMicroservice extends MicroService {
     @Override
     protected void initialize() {
         subscribeEvent(AttackEvent.class, (c) -> {
+            //executes attack mission
             c.executeAttack();
             complete(c, true);
             Diary diary=Diary.getInstance();
+            //sets finish time when finished
             diary.setHanSoloFinish(System.currentTimeMillis());
+            //increases total attacks by one after the attack execution
             diary.incrementTotalAttacks();
         });
+        //subscribes to termination broadcast
         subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
             terminate();
             Diary.getInstance().setHanSoloTerminate(System.currentTimeMillis());

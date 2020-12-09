@@ -24,12 +24,12 @@ public class Main {
 
     public static CountDownLatch countDownLatch= new CountDownLatch(4);
     public static void main(String[] args) throws InterruptedException, IOException {
-       if (args.length!=2){ //todo check if args[0] orv args[1]
+       if (args.length!=2){
             System.out.println("Invalid argument");
             return;
         }
         String filePath = args[0];
-        Input input = JsonReader.getInputFromJson(filePath);
+        Input input = JsonReader.getInputFromJson(filePath); //"input.json"
         Ewoks ewoks = Ewoks.getInstance();
         ewoks.load(input.getEwoks());
 
@@ -83,7 +83,8 @@ public class Main {
         Gson gson = new GsonBuilder().create();
         Diary myDiary = Diary.getInstance();
         try{
-            FileWriter fileWriter = new FileWriter(args[1]);
+            //write to output file
+            FileWriter fileWriter = new FileWriter(args[1]);//"Output.json"
             gson.toJson(myDiary, fileWriter);
             fileWriter.flush();
             fileWriter.close();

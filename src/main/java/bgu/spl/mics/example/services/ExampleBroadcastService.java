@@ -13,7 +13,7 @@ public class ExampleBroadcastService extends MicroService {
     }
 
     @Override
-    protected void initialize() {
+    public void initialize() {
         subscribeBroadcast(BroadcastExmpl.class, message -> {
             System.out.println("Broadcast Handler " + getName() + " got a new message from " + message.getSenderId());
             terminate();

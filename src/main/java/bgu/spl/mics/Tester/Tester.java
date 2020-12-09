@@ -373,7 +373,7 @@ public class Tester {
             System.out.println("\r\nInitating Test Sync By Sabina 1.....\r\n");
             boolean passedTestSabina = true;
 
-            for (int j = 0; passedTestSabina && j < 100; j++) {
+            for (int j = 0; passedTestSabina && j < 3000; j++) {
                 Thread.sleep(10);
                 numberOfM3.set(0);
                 numberOfM1.set(0);
