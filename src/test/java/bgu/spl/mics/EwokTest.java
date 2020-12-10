@@ -13,6 +13,7 @@ public class EwokTest {
     private Ewok ewok;
 
     @BeforeEach
+    //updated ewok test to receive serial number in constructor according implementation
     public void setUp() {
         ewok = new Ewok(1);
     }

@@ -31,6 +31,7 @@ public class MessageBusTest {
     }
 
     @Test
+    //updated tests to work in according to message bus implementation and structure
     //tests event in general (subscribe & send)
     public void testSubscribeEvent() throws InterruptedException {
         ExampleEventService m1 = new ExampleEventService();
@@ -47,6 +48,7 @@ public class MessageBusTest {
     }
 
     @Test
+    //updated tests to work in according to message bus implementation and structure
     //tests broadcast in general (subscribe & send)
     public void testSubscribeBroadcast() throws InterruptedException{
         ExampleBroadcastService m1 = new ExampleBroadcastService();
@@ -68,6 +70,7 @@ public class MessageBusTest {
 
     @Test
     public void testComplete() {
+        //updated tests to work in according to message bus implementation and structure
         assertThrows(NullPointerException.class, () -> messageBus.complete(exampleEvent, null));
         assertThrows(NullPointerException.class, () -> messageBus.complete(null, "true"));
         ExampleEventService m1 = new ExampleEventService();
@@ -82,6 +85,7 @@ public class MessageBusTest {
     }
 
     @Test
+    //updated tests to work in according to message bus implementation and structure
     public void testAwaitMessage() throws InterruptedException{
         ExampleBroadcastService m1 = new ExampleBroadcastService();
         messageBus.register(m1);
