@@ -169,6 +169,9 @@ public abstract class MicroService implements Runnable {
      * The entry point of the micro-service. TODO: you must complete this code
      * otherwise you will end up in an infinite loop.
      */
+    //Microservice (this) register to his type of messages he need to handle
+    //The microservices waite for messages and then act according to specific callback function (in a loop )
+    //Microservice (this) unregister
     @Override
     public final void run() {
         //registers service

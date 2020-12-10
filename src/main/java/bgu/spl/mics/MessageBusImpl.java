@@ -21,7 +21,7 @@ public class MessageBusImpl implements MessageBus {
         private static MessageBusImpl instance = new MessageBusImpl();
     }
 
-    public static MessageBusImpl getInstance() {//todo check if the instance need to be MessageBusImpl or MessageBus
+    public static MessageBusImpl getInstance() {
         return Singleton.instance;
     }
 
@@ -66,7 +66,6 @@ public class MessageBusImpl implements MessageBus {
     public void sendBroadcast(Broadcast b) {
         ConcurrentLinkedQueue<MicroService> subs;
         synchronized (b.getClass()) { //todo not sure this needs to be synchronized
-            //
             subs = messagesMap.get(b.getClass());
             if (subs == null) //if no one is subscribed for this broadcast do nothing
                 return;
@@ -115,7 +114,7 @@ public class MessageBusImpl implements MessageBus {
     //registers microservice to message bus and creates queue for it
     public void register(MicroService m) {
         MicroServiceMap.putIfAbsent(m, new LinkedBlockingQueue<>());
-    } //todo check put
+    }
 
     @Override
     public void unregister(MicroService m) {

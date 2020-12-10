@@ -26,10 +26,16 @@ public class LeiaMicroservice extends MicroService {
 		this.attacks = attacks;
     }
 
+    //Microservice Leia subscribe to Terminate Broadcast and supplies specific callback
+    //for each attack Leia send AttackEvent
+    //Leia wait until all the attackEvent will resolve
+    //Leia send DeactivationEvent and wait until it will resolve
+    //Leia send BombDestroyerEvent
     @Override
     protected void initialize() {
         subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
             terminate();
+            //sets termination time
             Diary.getInstance().setLeiaTerminate(System.currentTimeMillis());
         });
 
@@ -48,13 +54,6 @@ public class LeiaMicroservice extends MicroService {
     	futureDeactivation.get();
 
         Future futureBombDestroyer = sendEvent(new BombDestroyerEvent());
-
-
-
-
-
-
-
 
     }
 }

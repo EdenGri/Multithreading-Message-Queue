@@ -23,26 +23,32 @@ public class R2D2Microservice extends MicroService {
         super("R2D2");
         this.duration=duration;
     }
-
+    //Microservice R2D2 subscribe to DeactivationEvent and supplies specific callback
+    //Microservice R2D2 subscribe to Terminate Broadcast and supplies specific callback
     @Override
     protected void initialize() {
         subscribeEvent(DeactivationEvent.class, (c) -> {
             try {
+            //execute the deactivation
             Thread.sleep(getDuration());
-            complete(c, true);
-            Diary.getInstance().setR2D2Deactivate(System.currentTimeMillis());
             }catch (InterruptedException e){
                 e.printStackTrace();
             }
+            complete(c, true);
+            //sets deactivation time
+            Diary.getInstance().setR2D2Deactivate(System.currentTimeMillis());
+
         });
 
         subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
             terminate();
+            //sets termination time
             Diary.getInstance().setR2D2Terminate(System.currentTimeMillis());
         });
         Main.countDownLatch.countDown();
     }
 
+    //Return duration
     private long getDuration() {
         return duration;
     }

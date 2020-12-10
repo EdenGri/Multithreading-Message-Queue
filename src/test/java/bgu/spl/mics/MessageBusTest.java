@@ -41,9 +41,9 @@ public class MessageBusTest {
         messageBus.subscribeEvent(EventExmpl.class, m1);
         Future future = messageBus.sendEvent(exampleEvent);
         assertNotNull(future);
-        messageBus.sendEvent(exampleEvent);
         message = messageBus.awaitMessage(m1);
         assertSame(exampleEvent, message);
+        messageBus.unregister(m1);
     }
 
     @Test
@@ -62,6 +62,8 @@ public class MessageBusTest {
         Message message2 = messageBus.awaitMessage(m2);
         assertSame(message1,message2);
         assertSame(message1,exampleBroadcast);
+        messageBus.unregister(m1);
+        messageBus.unregister(m2);
     }
 
     @Test
@@ -76,6 +78,7 @@ public class MessageBusTest {
         messageBus.complete(exampleEvent, "true");
         assertEquals(future.get(), "true");
         assertTrue(future.isDone());
+        messageBus.unregister(m1);
     }
 
     @Test
@@ -85,6 +88,7 @@ public class MessageBusTest {
         messageBus.subscribeBroadcast(BroadcastExmpl.class, m1);
         messageBus.sendBroadcast(exampleBroadcast);
         assertEquals(messageBus.awaitMessage(m1), exampleBroadcast);
+        messageBus.unregister(m1);
 
     }
 

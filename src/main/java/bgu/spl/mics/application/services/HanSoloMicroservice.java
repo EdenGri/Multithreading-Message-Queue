@@ -26,7 +26,8 @@ public class HanSoloMicroservice extends MicroService {
         ewoks = Ewoks.getInstance();
     }
 
-
+    //Microservice HanSolo subscribe to AttackEvent and supplies specific callback
+    //Microservice HanSolo subscribe to Terminate Broadcast and supplies specific callback
     @Override
     protected void initialize() {
         subscribeEvent(AttackEvent.class, (c) -> {
@@ -42,6 +43,7 @@ public class HanSoloMicroservice extends MicroService {
         //subscribes to termination broadcast
         subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
             terminate();
+            //sets termination time
             Diary.getInstance().setHanSoloTerminate(System.currentTimeMillis());
         });
         Main.countDownLatch.countDown();

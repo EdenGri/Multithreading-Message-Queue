@@ -22,25 +22,29 @@ public class LandoMicroservice  extends MicroService {
         super("Lando");
         this.duration=duration;
     }
-
+    //Microservice Lando subscribe to BombDestroyerEvent and supplies specific callback
     @Override
     protected void initialize() {
         subscribeEvent(BombDestroyerEvent.class, (c)->{
             try {
+                //execute the bomb destroyer
                 Thread.sleep(getDuration());
-                complete(c, true);
-                sendBroadcast(new TerminateBroadcast());
-                terminate();
-                Diary.getInstance().setLandoTerminate(System.currentTimeMillis());
             }catch (InterruptedException e){
                 e.printStackTrace();
             }
+                complete(c, true);
+                //Lando send Terminate Broadcast
+                sendBroadcast(new TerminateBroadcast());
+                terminate();
+                //sets termination time
+                Diary.getInstance().setLandoTerminate(System.currentTimeMillis());
+
         });
 
         Main.countDownLatch.countDown();
 
     }
-
+    //Return duration
     private long getDuration() {
         return duration;
     }

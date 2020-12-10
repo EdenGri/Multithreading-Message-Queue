@@ -27,7 +27,8 @@ public class C3POMicroservice extends MicroService {
         super("C3PO");
         ewoks = Ewoks.getInstance();
     }
-
+    //Microservice C3PO subscribe to AttackEvent and supplies specific callback
+    //Microservice C3PO subscribe to Terminate Broadcast and supplies specific callback
     @Override
     protected void initialize() {
         subscribeEvent(AttackEvent.class, (c) -> {
@@ -43,6 +44,7 @@ public class C3POMicroservice extends MicroService {
         //subscribes to termination broadcast
         subscribeBroadcast(TerminateBroadcast.class, (broadcast)-> {
             terminate();
+            //sets termination time
             Diary.getInstance().setC3POTerminate(System.currentTimeMillis());
         });
         Main.countDownLatch.countDown();

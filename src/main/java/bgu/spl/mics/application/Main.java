@@ -24,12 +24,16 @@ public class Main {
 
     public static CountDownLatch countDownLatch= new CountDownLatch(4);
     public static void main(String[] args) throws InterruptedException, IOException {
+
        if (args.length!=2){
             System.out.println("Invalid argument");
             return;
         }
         String filePath = args[0];
+
         Input input = JsonReader.getInputFromJson(filePath); //"input.json"
+
+        //Input input = JsonReader.getInputFromJson("input.json");
         Ewoks ewoks = Ewoks.getInstance();
         ewoks.load(input.getEwoks());
 
@@ -85,6 +89,7 @@ public class Main {
         try{
             //write to output file
             FileWriter fileWriter = new FileWriter(args[1]);//"Output.json"
+            //FileWriter fileWriter = new FileWriter("Output.json");
             gson.toJson(myDiary, fileWriter);
             fileWriter.flush();
             fileWriter.close();

@@ -37,13 +37,13 @@ public class Ewoks {
             }
         }
     }
-
+    //Return true if the ewok map contains all the ewoks in the serial list
     private boolean containsAllSerials(List<Integer> serials){
         synchronized (ewokMap){
             return ewokMap.keySet().containsAll(serials);
         }
     }
-
+    //Release all the ewoks in the serial list.change there ability to be available in the natural order of numbers
     public void releaseEwoks(List<Integer> serialNumbers) {
         //validates input
         if(!containsAllSerials(serialNumbers))
@@ -60,6 +60,7 @@ public class Ewoks {
         }
     }
 
+    //Acquire all the ewoks in the serial list.change there ability to be unavailable in the natural order of numbers
     public void acquireEwoks(List<Integer> serialNumbers) {
         try {
             //validates input
