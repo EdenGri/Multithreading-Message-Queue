@@ -74,6 +74,10 @@ public class MessageBusImpl implements MessageBus {
         for (MicroService m : subs) {
             try {
                 LinkedBlockingQueue<Message> ms = MicroServiceMap.get(m);
+                //In case of unregistered microservice
+                if(ms == null) {
+                    continue;
+                }
                 ms.put(b);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -92,6 +96,7 @@ public class MessageBusImpl implements MessageBus {
         MicroService upNext;
         Future<T> output = new Future<>();
         determineFutureMap.put(e, output);
+        //validates the integrity of the round-robin in case of multiple events of the same type.
         synchronized (e.getClass()) {
             //takes next subscriber from head of message queue and adds him again to the end (in a round-robin manner)
             upNext = subscribers.poll();
@@ -118,7 +123,21 @@ public class MessageBusImpl implements MessageBus {
 
     @Override
     public void unregister(MicroService m) {
-        LinkedBlockingQueue<Message> messageQueue = MicroServiceMap.get(m);
+        messagesMap.forEach((t, s) -> {
+            synchronized (t) {//todo check why we need synch ? why on t?
+                //removes MicroService m from the list of subscribers to that type of message
+                s.remove(m);
+            }
+        });
+        LinkedBlockingQueue<Message> messageQueue;
+        synchronized (m) {//todo check why
+            messageQueue = MicroServiceMap.get(m);
+        }
+        //In case of unregister of unexciting microservice
+        if(messageQueue == null)
+        {
+            return;
+        }
         //returns message queue of specific MicroService in the map
         for (Message message : messageQueue) {
             if (message instanceof Broadcast) {
@@ -130,18 +149,20 @@ public class MessageBusImpl implements MessageBus {
                 future.resolve(null);
         }
         MicroServiceMap.remove(m);
-        messagesMap.forEach((t, s) -> {
-            synchronized (t) {//todo check why we need synch ? why on t?
-                //removes MicroService m from the list of subscribers to that type of message
-                s.remove(m);
-            }
-        });
+
     }
 
     @Override
     public Message awaitMessage(MicroService m) throws InterruptedException {
         //goes to the message queue of the MicroService m and retrieves the next message from head of queue (while also removing it)
-        return MicroServiceMap.get(m).take();
+        LinkedBlockingQueue<Message> queue = MicroServiceMap.get(m);
+
+        //In case of unregister microservice
+        if(queue == null) {
+            return null;
+        }
+
+        return queue.take();
     }
 
 
