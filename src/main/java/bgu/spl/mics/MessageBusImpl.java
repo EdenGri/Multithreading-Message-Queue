@@ -38,7 +38,7 @@ public class MessageBusImpl implements MessageBus {
 
     @Override
     // A Microservice calls this method to subscribe itself for some type event
-    public <T> void subscribeEvent(Class<? extends Event<T>> type, MicroService m) {//todo we need to check if m register?
+    public <T> void subscribeEvent(Class<? extends Event<T>> type, MicroService m) {
         if (type == null || m == null)
             throw new NullPointerException();
         subscribeGeneral(type, m);
@@ -65,7 +65,7 @@ public class MessageBusImpl implements MessageBus {
     // A Microservice calls this method to add the broadcast message to queues of all Microservices subscribed to it
     public void sendBroadcast(Broadcast b) {
         ConcurrentLinkedQueue<MicroService> subs;
-        synchronized (b.getClass()) { //todo not sure this needs to be synchronized
+        synchronized (b.getClass()) {
             subs = messagesMap.get(b.getClass());
             if (subs == null) //if no one is subscribed for this broadcast do nothing
                 return;
@@ -106,7 +106,7 @@ public class MessageBusImpl implements MessageBus {
         }
         //adds event message to message queue of the subscriber that was next in line
         LinkedBlockingQueue<Message> messageQueue;
-        synchronized (upNext) { // todo check why we need the synch
+        synchronized (upNext) {
             messageQueue = MicroServiceMap.get(upNext); //gets next in line
             if (messageQueue == null)
                 return null;
@@ -124,13 +124,13 @@ public class MessageBusImpl implements MessageBus {
     @Override
     public void unregister(MicroService m) {
         messagesMap.forEach((t, s) -> {
-            synchronized (t) {//todo check why we need synch ? why on t?
+            synchronized (t) {
                 //removes MicroService m from the list of subscribers to that type of message
                 s.remove(m);
             }
         });
         LinkedBlockingQueue<Message> messageQueue;
-        synchronized (m) {//todo check why
+        synchronized (m) {
             messageQueue = MicroServiceMap.get(m);
         }
         //In case of unregister of unexciting microservice
