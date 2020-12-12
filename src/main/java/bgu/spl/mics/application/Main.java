@@ -31,9 +31,8 @@ public class Main {
         }
         String filePath = args[0];
 
-        Input input = JsonReader.getInputFromJson(filePath); //"input.json"
+        Input input = JsonReader.getInputFromJson(filePath);
 
-        //Input input = JsonReader.getInputFromJson("input.json");
         Ewoks ewoks = Ewoks.getInstance();
         ewoks.load(input.getEwoks());
 
@@ -60,7 +59,7 @@ public class Main {
         Thread t5 = new Thread(leia);
         t5.start();
 
-        //todo check if need all this join or should delete
+
         t1.join();
         t2.join();
         t3.join();
@@ -69,19 +68,6 @@ public class Main {
 
 
 
-        ////this is all for DEBUG!!! todo delete
-
-        Diary diary = Diary.getInstance();
-        System.out.println("Total Attacks: " +diary.getTotalAttacks());
-        System.out.println("HanSolo Finish: " +diary.getHanSoloFinish());
-        System.out.println("C3PO Finish: " +diary.getC3POFinish());
-        System.out.println("R2D2 Deactivate: " +diary.getR2D2Deactivate());
-        System.out.println("Leia Terminate: " +diary.getLeiaTerminate());
-        System.out.println("HanSolo Terminate: " +diary.getHanSoloTerminate());
-        System.out.println("C3PO Terminate: " +diary.getC3POTerminate());
-        System.out.println("R2D2 Terminate: " +diary.getR2D2Terminate());
-        System.out.println("Lando Terminate: " +diary.getLandoTerminate());
-
 
 
         Gson gson = new GsonBuilder().create();
@@ -89,7 +75,6 @@ public class Main {
         try{
             //write to output file
             FileWriter fileWriter = new FileWriter(args[1]);//"Output.json"
-            //FileWriter fileWriter = new FileWriter("Output.json");
             gson.toJson(myDiary, fileWriter);
             fileWriter.flush();
             fileWriter.close();
